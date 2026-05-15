@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-4">
+
+            <div class="card shadow">
+
+                <div class="card-header">
+                    <h4>HDMC Portal Login</h4>
+                </div>
+
+                <div class="card-body">
+
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    }
+
+                    <form method="post">
+
+                        <div class="mb-3">
+                            <label>User ID</label>
+
+                            <input type="text"
+                                   name="userId"
+                                   class="form-control"
+                                   autofocus />
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Password</label>
+
+                            <input type="password"
+                                   name="password"
+                                   class="form-control" />
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+                            Login
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

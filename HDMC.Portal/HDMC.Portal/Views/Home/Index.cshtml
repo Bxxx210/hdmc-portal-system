@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Home";
+}
+
+<div class="container mt-5">
+
+    <h2>
+        Welcome @Session["UserName"]
+    </h2>
+
+    <hr />
+
+    <div class="list-group">
+
+        <a href="@Url.Action(
+             "Index",
+             "Company")"
+           class="list-group-item list-group-item-action">
+            Hardware Min Alarm
+        </a>
+
+        <a href="@Url.Action(
+             "Index",
+             "CountLocation")"
+           class="list-group-item list-group-item-action">
+
+            Count Location Pick Face
+
+        </a>
+
+        <a href="@Url.Action(
+             "Index",
+             "UserManagement")"
+           class="list-group-item list-group-item-action">
+
+            User Management
+
+
+        </a>
+
+    </div>
+
+</div>

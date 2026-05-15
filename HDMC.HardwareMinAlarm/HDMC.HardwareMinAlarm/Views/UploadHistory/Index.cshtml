@@ -1,0 +1,74 @@
+﻿@model List<HDMC.HardwareMinAlarm.Models.UploadHistoryModel>
+
+@{
+    ViewBag.Title = "Upload History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header">
+            <h4>Upload History</h4>
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-bordered">
+
+                <thead>
+
+                    <tr>
+                        <th>Date</th>
+                        <th>File</th>
+                        <th>Total</th>
+                        <th>Success</th>
+                        <th>Failed</th>
+                        <th>User</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @item.UploadedDate
+                            </td>
+
+                            <td>
+                                @item.FileName
+                            </td>
+
+                            <td>
+                                @item.TotalRows
+                            </td>
+
+                            <td>
+                                @item.SuccessRows
+                            </td>
+
+                            <td>
+                                @item.FailedRows
+                            </td>
+
+                            <td>
+                                @item.UploadedBy
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
