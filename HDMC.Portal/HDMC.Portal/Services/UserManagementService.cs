@@ -29,5 +29,12 @@ namespace HDMC.Portal.Services
 
             _repository.CreateUser(model, passwordHash);
         }
+
+        public void ResetPassword(string userId, string password)
+        {
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+
+            _repository.UpdatePasswordHash(userId, passwordHash);
+        }
     }
 }

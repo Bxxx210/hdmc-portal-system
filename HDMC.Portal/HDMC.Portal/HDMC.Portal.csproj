@@ -222,6 +222,7 @@
     <Content Include="Views\Company\Index.cshtml" />
     <Content Include="Views\UserManagement\Index.cshtml" />
     <Content Include="Views\UserManagement\Create.cshtml" />
+    <Content Include="Views\UserManagement\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

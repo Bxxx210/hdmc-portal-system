@@ -127,5 +127,28 @@ namespace HDMC.Portal.Repositories
                 }
             }
         }
+
+        public void UpdatePasswordHash(
+            string userId,
+            string passwordHash)
+        {
+            using (var connection =
+                   DbConnectionFactory.CreateSharedAuthConnection())
+            {
+                const string sql = @"
+                    UPDATE Users
+                    SET
+                        password_hash = @PasswordHash
+                    WHERE user_id = @UserId";
+
+                connection.Execute(
+                    sql,
+                    new
+                    {
+                        UserId = userId,
+                        PasswordHash = passwordHash
+                    });
+            }
+        }
     }
 }
