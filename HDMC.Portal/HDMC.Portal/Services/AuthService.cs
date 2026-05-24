@@ -1,4 +1,5 @@
-﻿using HDMC.Portal.Models;
+﻿using System;
+using HDMC.Portal.Models;
 using HDMC.Portal.Repositories;
 
 namespace HDMC.Portal.Services
@@ -61,13 +62,20 @@ namespace HDMC.Portal.Services
                 return false;
             }
 
+            var normalizedPasswordHash =
+                passwordHash.Trim();
+
             try
             {
                 return BCrypt.Net.BCrypt.Verify(
                     password,
-                    passwordHash);
+                    normalizedPasswordHash);
             }
             catch (BCrypt.Net.SaltParseException)
+            {
+                return false;
+            }
+            catch (ArgumentException)
             {
                 return false;
             }
