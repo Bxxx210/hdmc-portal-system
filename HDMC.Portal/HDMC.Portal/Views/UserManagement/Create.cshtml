@@ -1,0 +1,112 @@
+﻿@model HDMC.Portal.Models.UserManagementModel
+
+@{
+    ViewBag.Title = "Create User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header">
+            <h4>Create User</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form method="post">
+
+                <div class="mb-3">
+
+                    <label>User ID</label>
+
+                    <input type="text"
+                           name="UserId"
+                           class="form-control"
+                           required />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>User Name</label>
+
+                    <input type="text"
+                           name="UserName"
+                           class="form-control"
+                           required />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Password</label>
+
+                    <input type="password"
+                           name="password"
+                           class="form-control"
+                           required />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Company</label>
+
+                    <select name="Company"
+                            class="form-select">
+
+                        <option value="3047">
+                            COMPANY 3047
+                        </option>
+
+                        <option value="3048">
+                            COMPANY 3048
+                        </option>
+
+                        <option value="3049">
+                            COMPANY 3049
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Role</label>
+
+                    <select name="RoleId"
+                            class="form-select">
+
+                        <option value="1">
+                            Admin IT
+                        </option>
+
+                        <option value="2">
+                            Super User
+                        </option>
+
+                        <option value="3">
+                            User
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    Create User
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

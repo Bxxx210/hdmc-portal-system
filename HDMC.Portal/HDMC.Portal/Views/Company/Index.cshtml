@@ -1,0 +1,51 @@
+﻿@model List<HDMC.Portal.Models.CompanyModel>
+
+@{
+    ViewBag.Title = "Select Company";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-4">
+
+            <div class="card shadow">
+
+                <div class="card-header">
+                    <h4>Select Company</h4>
+                </div>
+
+                <div class="card-body">
+
+                    @foreach (var item in Model)
+                    {
+                        <form method="post"
+                              action="@Url.Action(
+                                          "Select",
+                                          "Company")">
+
+                            <input type="hidden"
+                                   name="company"
+                                   value="@item.Company" />
+
+                            <button type="submit"
+                                    class="btn btn-outline-primary w-100 mb-2">
+
+                                @item.Company
+
+                            </button>
+
+                        </form>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

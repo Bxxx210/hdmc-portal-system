@@ -1,0 +1,18 @@
+# Visual Studio
+.vs/
+bin/
+obj/
+
+# User files
+*.user
+*.suo
+.DS_Store
+
+# Config
+Web.config
+web.config
+Web.*.config
+web.*.config
+
+# Logs
+*.log
