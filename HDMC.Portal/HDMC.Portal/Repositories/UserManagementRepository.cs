@@ -18,7 +18,8 @@ namespace HDMC.Portal.Repositories
                                 u.user_id      AS UserId,
                                 u.user_name    AS UserName,
                                 u.is_active    AS IsActive,
-                                uc.company     AS Company,
+                                access.Companies AS Companies,
+                                access.Applications AS Applications,
                                 r.role_id      AS RoleId,
                                 r.role_name    AS RoleName
                             FROM Users u
@@ -26,14 +27,34 @@ namespace HDMC.Portal.Repositories
                                 ON u.user_id = ur.user_id
                             LEFT JOIN Roles r
                                 ON ur.role_id = r.role_id
-                            LEFT JOIN User_Company uc
-                                ON u.user_id = uc.user_id
+                            OUTER APPLY
+                            (
+                                SELECT
+                                    STUFF((
+                                        SELECT DISTINCT ', ' + uc2.company
+                                        FROM User_Company uc2
+                                        WHERE uc2.user_id = u.user_id
+                                        FOR XML PATH(''), TYPE
+                                    ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS Companies,
+                                    STUFF((
+                                        SELECT DISTINCT ', ' +
+                                            CASE uc3.app_id
+                                                WHEN 1 THEN 'Hardware Min Alarm'
+                                                WHEN 2 THEN 'Count Location Pick Face'
+                                                ELSE 'App ' + CAST(uc3.app_id AS NVARCHAR(20))
+                                            END
+                                        FROM User_Company uc3
+                                        WHERE uc3.user_id = u.user_id
+                                        FOR XML PATH(''), TYPE
+                                    ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS Applications
+                            ) access
                             WHERE
                                 (
                                     @SearchText IS NULL
                                     OR u.user_id LIKE @SearchPattern
                                     OR u.user_name LIKE @SearchPattern
-                                    OR uc.company LIKE @SearchPattern
+                                    OR access.Companies LIKE @SearchPattern
+                                    OR access.Applications LIKE @SearchPattern
                                     OR r.role_name LIKE @SearchPattern
                                 )
                             ORDER BY u.user_id";
@@ -63,7 +84,6 @@ namespace HDMC.Portal.Repositories
                         u.user_id      AS UserId,
                         u.user_name    AS UserName,
                         u.is_active    AS IsActive,
-                        uc.company     AS Company,
                         r.role_id      AS RoleId,
                         r.role_name    AS RoleName
                     FROM Users u
@@ -71,16 +91,31 @@ namespace HDMC.Portal.Repositories
                         ON u.user_id = ur.user_id
                     LEFT JOIN Roles r
                         ON ur.role_id = r.role_id
-                    LEFT JOIN User_Company uc
-                        ON u.user_id = uc.user_id
                     WHERE u.user_id = @UserId";
 
-                return connection.QueryFirstOrDefault<UserManagementModel>(
+                var user =
+                    connection.QueryFirstOrDefault<UserManagementModel>(
                     sql,
                     new
                     {
                         UserId = userId
                     });
+
+                if (user == null)
+                {
+                    return null;
+                }
+
+                user.SelectedCompanyCodes =
+                    GetUserCompanies(connection, userId);
+
+                user.SelectedAppIds =
+                    GetUserAppIds(connection, userId);
+
+                user.Company =
+                    user.SelectedCompanyCodes.FirstOrDefault();
+
+                return user;
             }
         }
 
@@ -241,29 +276,10 @@ namespace HDMC.Portal.Repositories
                         },
                         transaction);
 
-                    // Assign company access
-                    const string companySql = @"
-                        INSERT INTO User_Company
-                        (
-                            user_id,
-                            app_id,
-                            company
-                        )
-                        VALUES
-                        (
-                            @UserId,
-                            1,
-                            @Company
-                        )";
-
-                    connection.Execute(
-                        companySql,
-                        new
-                        {
-                            model.UserId,
-                            model.Company
-                        },
-                        transaction);
+                    InsertUserCompanyAccess(
+                        connection,
+                        transaction,
+                        model);
 
                     transaction.Commit();
                 }
@@ -321,7 +337,7 @@ namespace HDMC.Portal.Repositories
                         transaction);
 
                     UpsertUserRole(connection, transaction, model);
-                    UpsertUserCompany(connection, transaction, model);
+                    ReplaceUserCompanyAccess(connection, transaction, model);
 
                     transaction.Commit();
                 }
@@ -394,54 +410,101 @@ namespace HDMC.Portal.Repositories
                 transaction);
         }
 
-        private void UpsertUserCompany(
+        private void ReplaceUserCompanyAccess(
             System.Data.IDbConnection connection,
             System.Data.IDbTransaction transaction,
             UserManagementModel model)
         {
-            const string existsSql = @"
-                SELECT COUNT(1)
-                FROM User_Company
-                WHERE user_id = @UserId
-                AND app_id = 1";
-
-            var exists =
-                connection.ExecuteScalar<int>(
-                    existsSql,
-                    new
-                    {
-                        model.UserId
-                    },
-                    transaction) > 0;
-
-            var sql = exists
-                ? @"
-                    UPDATE User_Company
-                    SET company = @Company
-                    WHERE user_id = @UserId
-                    AND app_id = 1"
-                : @"
-                    INSERT INTO User_Company
-                    (
-                        user_id,
-                        app_id,
-                        company
-                    )
-                    VALUES
-                    (
-                        @UserId,
-                        1,
-                        @Company
-                    )";
+            const string deleteSql = @"
+                DELETE FROM User_Company
+                WHERE user_id = @UserId";
 
             connection.Execute(
+                deleteSql,
+                new
+                {
+                    model.UserId
+                },
+                transaction);
+
+            InsertUserCompanyAccess(
+                connection,
+                transaction,
+                model);
+        }
+
+        private void InsertUserCompanyAccess(
+            System.Data.IDbConnection connection,
+            System.Data.IDbTransaction transaction,
+            UserManagementModel model)
+        {
+            const string sql = @"
+                INSERT INTO User_Company
+                (
+                    user_id,
+                    app_id,
+                    company
+                )
+                VALUES
+                (
+                    @UserId,
+                    @AppId,
+                    @Company
+                )";
+
+            foreach (var appId in model.SelectedAppIds.Distinct())
+            {
+                foreach (var company in model.SelectedCompanyCodes.Distinct())
+                {
+                    connection.Execute(
+                        sql,
+                        new
+                        {
+                            model.UserId,
+                            AppId = appId,
+                            Company = company
+                        },
+                        transaction);
+                }
+            }
+        }
+
+        private string[] GetUserCompanies(
+            System.Data.IDbConnection connection,
+            string userId)
+        {
+            const string sql = @"
+                SELECT DISTINCT company
+                FROM User_Company
+                WHERE user_id = @UserId
+                ORDER BY company";
+
+            return connection.Query<string>(
                 sql,
                 new
                 {
-                    model.UserId,
-                    model.Company
-                },
-                transaction);
+                    UserId = userId
+                })
+                .ToArray();
+        }
+
+        private int[] GetUserAppIds(
+            System.Data.IDbConnection connection,
+            string userId)
+        {
+            const string sql = @"
+                SELECT DISTINCT app_id
+                FROM User_Company
+                WHERE user_id = @UserId
+                ORDER BY app_id";
+
+            return connection.Query<int>(
+                sql,
+                new
+                {
+                    UserId = userId
+                })
+                .ToArray();
         }
     }
 }

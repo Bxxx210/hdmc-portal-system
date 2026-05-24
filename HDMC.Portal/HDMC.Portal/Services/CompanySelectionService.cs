@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using HDMC.Portal.Models;
 using HDMC.Portal.Repositories;
@@ -7,7 +8,8 @@ namespace HDMC.Portal.Services
 {
     public class CompanySelectionService
     {
-        private const int HardwareMinAlarmAppId = 1;
+        public const int HardwareMinAlarmAppId = 1;
+        public const int CountLocationAppId = 2;
         private const string DefaultHardwareEntryUrl = "https://localhost:44316/Home/Entry";
 
         private readonly CompanyRepository _companyRepository;
@@ -44,6 +46,18 @@ namespace HDMC.Portal.Services
             return _companyRepository.GetCompaniesByUserId(
                 userId,
                 HardwareMinAlarmAppId);
+        }
+
+        public bool HasAccessToApp(
+            HttpSessionStateBase session,
+            int appId)
+        {
+            var userId = _sessionService.GetUserId(session);
+
+            return _companyRepository.GetCompaniesByUserId(
+                    userId,
+                    appId)
+                .Any();
         }
 
         public string SelectCompanyAndBuildHardwareUrl(

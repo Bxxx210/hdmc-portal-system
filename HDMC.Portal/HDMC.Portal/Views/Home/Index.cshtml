@@ -20,31 +20,40 @@
 
     <div class="list-group">
 
-        <a href="@Url.Action(
-             "Index",
-             "Company")"
-           class="list-group-item list-group-item-action">
-            Hardware Min Alarm
-        </a>
+        @if (ViewBag.CanAccessHardware == true)
+        {
+            <a href="@Url.Action(
+                 "Index",
+                 "Company")"
+               class="list-group-item list-group-item-action">
+                Hardware Min Alarm
+            </a>
+        }
 
-        <a href="@Url.Action(
-             "Index",
-             "CountLocation")"
-           class="list-group-item list-group-item-action">
+        @if (ViewBag.CanAccessCountLocation == true)
+        {
+            <a href="@Url.Action(
+                 "Index",
+                 "CountLocation")"
+               class="list-group-item list-group-item-action">
 
-            Count Location Pick Face
+                Count Location Pick Face
 
-        </a>
+            </a>
+        }
 
-        <a href="@Url.Action(
-             "Index",
-             "UserManagement")"
-           class="list-group-item list-group-item-action">
+        @if (ViewBag.IsAdmin == true)
+        {
+            <a href="@Url.Action(
+                 "Index",
+                 "UserManagement")"
+               class="list-group-item list-group-item-action">
 
-            User Management
+                User Management
 
 
-        </a>
+            </a>
+        }
 
     </div>
 

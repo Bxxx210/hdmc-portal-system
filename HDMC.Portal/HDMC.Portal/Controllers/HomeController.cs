@@ -6,15 +6,19 @@ namespace HDMC.Portal.Controllers
     public class HomeController : BaseController
     {
         private readonly SessionService _sessionService;
+        private readonly CompanySelectionService _companySelectionService;
 
         public HomeController()
-            : this(new SessionService())
+            : this(new SessionService(), new CompanySelectionService())
         {
         }
 
-        public HomeController(SessionService sessionService)
+        public HomeController(
+            SessionService sessionService,
+            CompanySelectionService companySelectionService)
         {
             _sessionService = sessionService;
+            _companySelectionService = companySelectionService;
         }
 
         [HttpGet]
@@ -24,6 +28,19 @@ namespace HDMC.Portal.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
+
+            ViewBag.IsAdmin =
+                _sessionService.GetRoleId(Session) == 1;
+
+            ViewBag.CanAccessHardware =
+                _companySelectionService.HasAccessToApp(
+                    Session,
+                    CompanySelectionService.HardwareMinAlarmAppId);
+
+            ViewBag.CanAccessCountLocation =
+                _companySelectionService.HasAccessToApp(
+                    Session,
+                    CompanySelectionService.CountLocationAppId);
 
             return View();
         }

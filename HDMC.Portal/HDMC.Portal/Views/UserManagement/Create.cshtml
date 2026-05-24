@@ -72,13 +72,65 @@
 
                 <div class="mb-3">
 
-                    <label>Company</label>
+                    <label>Application Access</label>
 
-                    @Html.DropDownList(
-                        "Company",
-                        (IEnumerable<SelectListItem>)ViewBag.Companies,
-                        "Select Company",
-                        new { @class = "form-select", required = "required" })
+                    @foreach (var app in (IEnumerable<SelectListItem>)ViewBag.Applications)
+                    {
+                        <div class="form-check">
+                            <input type="checkbox"
+                                   name="SelectedAppIds"
+                                   value="@app.Value"
+                                   class="form-check-input"
+                                   id="app_@app.Value"
+                                   @(app.Selected ? "checked" : string.Empty) />
+
+                            <label class="form-check-label"
+                                   for="app_@app.Value">
+                                @app.Text
+                            </label>
+                        </div>
+                    }
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Company Access</label>
+
+                    <input type="hidden"
+                           name="IsAllCompanies"
+                           value="false" />
+
+                    <div class="form-check mb-2">
+                        <input type="checkbox"
+                               name="IsAllCompanies"
+                               value="true"
+                               class="form-check-input"
+                               id="IsAllCompanies"
+                               @(ViewBag.IsAllCompanies == true ? "checked" : string.Empty) />
+
+                        <label class="form-check-label"
+                               for="IsAllCompanies">
+                            All Companies
+                        </label>
+                    </div>
+
+                    @foreach (var company in (IEnumerable<SelectListItem>)ViewBag.Companies)
+                    {
+                        <div class="form-check">
+                            <input type="checkbox"
+                                   name="SelectedCompanyCodes"
+                                   value="@company.Value"
+                                   class="form-check-input company-option"
+                                   id="company_@company.Value"
+                                   @(company.Selected ? "checked" : string.Empty) />
+
+                            <label class="form-check-label"
+                                   for="company_@company.Value">
+                                @company.Text
+                            </label>
+                        </div>
+                    }
 
                 </div>
 
@@ -108,3 +160,24 @@
     </div>
 
 </div>
+
+<script>
+    (function () {
+        var allCompanies =
+            document.getElementById("IsAllCompanies");
+
+        var companyOptions =
+            document.querySelectorAll(".company-option");
+
+        function syncCompanyOptions() {
+            for (var i = 0; i < companyOptions.length; i++) {
+                companyOptions[i].disabled = allCompanies.checked;
+            }
+        }
+
+        if (allCompanies) {
+            allCompanies.addEventListener("change", syncCompanyOptions);
+            syncCompanyOptions();
+        }
+    })();
+</script>

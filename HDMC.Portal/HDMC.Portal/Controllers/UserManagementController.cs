@@ -186,14 +186,30 @@ namespace HDMC.Portal.Controllers
 
         private void PopulateUserOptions(UserManagementModel model)
         {
+            var activeCompanies =
+                _userManagementService.GetActiveCompanies();
+
             var companies =
-                _userManagementService.GetActiveCompanies()
+                activeCompanies
                     .Select(company => new SelectListItem
                     {
                         Value = company.Company,
                         Text = company.Company,
                         Selected = model != null &&
-                            model.Company == company.Company
+                            model.SelectedCompanyCodes != null &&
+                            model.SelectedCompanyCodes.Contains(company.Company)
+                    })
+                    .ToList();
+
+            var applications =
+                _userManagementService.GetApplications()
+                    .Select(application => new SelectListItem
+                    {
+                        Value = application.AppId.ToString(),
+                        Text = application.AppName,
+                        Selected = model != null &&
+                            model.SelectedAppIds != null &&
+                            model.SelectedAppIds.Contains(application.AppId)
                     })
                     .ToList();
 
@@ -209,7 +225,19 @@ namespace HDMC.Portal.Controllers
                     .ToList();
 
             ViewBag.Companies = companies;
+            ViewBag.Applications = applications;
             ViewBag.Roles = roles;
+            ViewBag.IsAllCompanies =
+                model != null &&
+                (
+                    model.IsAllCompanies ||
+                    (
+                        model.SelectedCompanyCodes != null &&
+                        activeCompanies.Any() &&
+                        model.SelectedCompanyCodes.Length ==
+                            activeCompanies.Count
+                    )
+                );
         }
     }
 }
