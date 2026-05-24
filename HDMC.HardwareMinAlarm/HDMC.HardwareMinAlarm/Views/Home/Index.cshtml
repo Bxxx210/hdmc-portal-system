@@ -1,250 +1,198 @@
-@{
+﻿@{
     ViewBag.Title = "Hardware Min Alarm";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<main class="scan-page">
+<div class="container mt-4">
 
-    <section class="scan-header">
+    <div class="card shadow">
 
-        <div>
-            <div class="scan-eyebrow">HDMC Hardware Min Alarm</div>
-            <h1>Scan Part</h1>
-        </div>
+        <div class="card-header">
 
-        <div class="scan-user-panel">
-            <div>
-                <span>User</span>
-                <strong>@Session["UserName"]</strong>
+            <div class="d-flex justify-content-between">
+
+                <div>
+                    <strong>User:</strong>
+                    @Session["UserName"]
+                </div>
+
+                <div>
+                    <strong>Company:</strong>
+                    @Session["Company"]
+                </div>
+
             </div>
-            <div>
-                <span>Company</span>
-                <strong>@Session["Company"]</strong>
-            </div>
+
         </div>
 
-    </section>
+        <div class="card-body">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success scan-alert">
-            @TempData["SuccessMessage"]
-        </div>
-    }
+                    @TempData["SuccessMessage"]
 
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger scan-alert">
-            @TempData["ErrorMessage"]
-        </div>
-    }
+                </div>
+            }
 
-    @if (ViewBag.ErrorMessage != null)
-    {
-        <div class="alert alert-danger scan-alert">
-            @ViewBag.ErrorMessage
-        </div>
-    }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
 
-    <section class="scan-panel">
+                    @TempData["ErrorMessage"]
 
-        <form method="post"
-              class="scan-form">
+                </div>
+            }
 
-            <label for="txtPartNumber">
-                Part Number
-            </label>
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
 
-            <div class="scan-input-row">
+            <form method="post">
 
-                <input type="text"
-                       id="txtPartNumber"
-                       name="partNumber"
-                       class="form-control scan-input"
-                       autocomplete="off"
-                       autofocus />
+                <div class="mb-3">
 
-                <button type="submit"
-                        class="btn btn-primary scan-search-button">
+                    <label>
+                        Scan Part Number
+                    </label>
 
+                    <input type="text"
+                           id="txtPartNumber"
+                           name="partNumber"
+                           class="form-control form-control-lg"
+                           autofocus />
+
+                </div>
+
+                <button class="btn btn-primary btn-lg w-100">
                     Search
-
-                </button>
-
-            </div>
-
-        </form>
-
-    </section>
-
-    @if (ViewBag.PartNumber != null)
-    {
-        <section class="part-panel">
-
-            <div class="part-title-row">
-                <div>
-                    <span>Part</span>
-                    <strong>@ViewBag.PartNumber</strong>
-                </div>
-                <div>
-                    <span>Status</span>
-                    <strong>@(string.IsNullOrWhiteSpace(ViewBag.PartStatus as string) ? "-" : ViewBag.PartStatus)</strong>
-                </div>
-            </div>
-
-            <div class="part-description">
-                @ViewBag.PartDescription
-            </div>
-
-            <dl class="part-detail-grid">
-                <div>
-                    <dt>From Location</dt>
-                    <dd>@(string.IsNullOrWhiteSpace(ViewBag.LocationName as string) ? "-" : ViewBag.LocationName)</dd>
-                </div>
-                <div>
-                    <dt>Last User</dt>
-                    <dd>@(string.IsNullOrWhiteSpace(ViewBag.UserStamp as string) ? "-" : ViewBag.UserStamp)</dd>
-                </div>
-            </dl>
-
-        </section>
-
-        <section class="status-panel">
-
-            <h2>Move To Location</h2>
-
-            <form method="post"
-                  action="@Url.Action(
-                      "SaveStatus",
-                      "Home")">
-
-                <input type="hidden"
-                       name="partNumber"
-                       value="@ViewBag.PartNumber" />
-
-                <div class="status-button-grid">
-
-                    <input type="radio"
-                           id="status100"
-                           name="statusCode"
-                           value="100"
-                           class="status-radio" />
-
-                    <label for="status100"
-                           class="status-action-button">
-
-                        <span>100</span>
-                        Request Replenish
-
-                    </label>
-
-                    <input type="radio"
-                           id="status200"
-                           name="statusCode"
-                           value="200"
-                           class="status-radio" />
-
-                    <label for="status200"
-                           class="status-action-button">
-
-                        <span>200</span>
-                        Kanban from MFG
-
-                    </label>
-
-                    <input type="radio"
-                           id="status300"
-                           name="statusCode"
-                           value="300"
-                           class="status-radio" />
-
-                    <label for="status300"
-                           class="status-action-button">
-
-                        <span>300</span>
-                        Stock min &lt;10 days
-
-                    </label>
-
-                    <input type="radio"
-                           id="status400"
-                           name="statusCode"
-                           value="400"
-                           class="status-radio" />
-
-                    <label for="status400"
-                           class="status-action-button">
-
-                        <span>400</span>
-                        Location discrepancy
-
-                    </label>
-
-                    <input type="radio"
-                           id="status500"
-                           name="statusCode"
-                           value="500"
-                           class="status-radio" />
-
-                    <label for="status500"
-                           class="status-action-button">
-
-                        <span>500</span>
-                        Check Shipment ETA
-
-                    </label>
-
-                    <input type="radio"
-                           id="status600"
-                           name="statusCode"
-                           value="600"
-                           class="status-radio" />
-
-                    <label for="status600"
-                           class="status-action-button">
-
-                        <span>600</span>
-                        ETA Today
-
-                    </label>
-
-                    <input type="radio"
-                           id="status900"
-                           name="statusCode"
-                           value="900"
-                           class="status-radio" />
-
-                    <label for="status900"
-                           class="status-action-button status-complete-button">
-
-                        <span>900</span>
-                        Replenish Completed
-
-                    </label>
-
-                </div>
-
-                <button type="submit"
-                        class="btn btn-success save-status-button">
-
-                    Save Status
-
                 </button>
 
             </form>
 
-        </section>
-    }
+            @if (ViewBag.PartNumber != null)
+            {
+                <hr />
 
-</main>
+                <div class="mt-3">
 
+                    <p>
+                        <strong>Part:</strong>
+                        @ViewBag.PartNumber
+                    </p>
+
+                    <p>
+                        <strong>Description:</strong>
+                        @ViewBag.PartDescription
+                    </p>
+
+                    <p>
+                        <strong>Current Status:</strong>
+                        @ViewBag.PartStatus
+                    </p>
+
+                    <p>
+                        <strong>From Location:</strong>
+                        @ViewBag.LocationName
+                    </p>
+
+                    <p>
+                        <strong>Last User:</strong>
+                        @ViewBag.UserStamp
+                    </p>
+
+                </div>
+
+                <hr />
+
+                <form method="post"
+                      action="@Url.Action(
+                          "SaveStatus",
+                          "Home")">
+
+                    <input type="hidden"
+                           name="PartNumber"
+                           value="@ViewBag.PartNumber" />
+
+                    <select id="ddlStatusCode" name="StatusCode"
+                            class="form-select form-select-lg mb-3">
+
+                        <option value="">
+                            Move To Location
+                        </option>
+
+                        <option value="100">
+                            100 - Request Replenish
+                        </option>
+
+                        <option value="200">
+                            200 - Kanban from MFG
+                        </option>
+
+                        <option value="300">
+                            300 - Stock min &lt;10 days
+                        </option>
+
+                        <option value="400">
+                            400 - Location discrepancy
+                        </option>
+
+                        <option value="500">
+                            500 - Check Shipment ETA
+                        </option>
+
+                        <option value="600">
+                            600 - ETA Today
+                        </option>
+
+                        <option value="900">
+                            900 - Replenish Completed
+                        </option>
+
+                    </select>
+
+                    <button type="submit"
+                            class="btn btn-success btn-lg w-100">
+
+                        Save Status
+
+                    </button>
+
+                </form>
+            }
+
+        </div>
+
+    </div>
+
+</div>
 <script>
-    window.onload = function () {
-        var partTextbox =
-            document.getElementById("txtPartNumber");
 
-        if (partTextbox) {
+    window.onload = function ()
+    {
+        var partTextbox =
+            document.getElementById(
+                "txtPartNumber");
+
+        var statusDropdown =
+            document.getElementById(
+                "ddlStatusCode");
+
+        // Default focus on scan textbox
+        if (partTextbox)
+        {
             partTextbox.focus();
         }
+
+        // After successful scan,
+        // move focus to status dropdown
+        if (statusDropdown)
+        {
+            statusDropdown.focus();
+        }
     };
+
 </script>

@@ -3,66 +3,44 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - HDMC Hardware Min Alarm</title>
+    <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body class="hardware-shell">
-    <nav class="navbar navbar-expand-sm navbar-dark hardware-navbar">
-        <div class="container-fluid">
-            @Html.ActionLink(
-                "HDMC Hardware",
-                "Index",
-                "Home",
-                new { area = "" },
-                new { @class = "navbar-brand" })
-
-            <button type="button"
-                    class="navbar-toggler"
-                    data-bs-toggle="collapse"
-                    data-bs-target=".navbar-collapse"
-                    title="Toggle navigation"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+        <div class="container">
+            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-
             </button>
-
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li>
                         @Html.ActionLink(
-                            "Scan",
-                            "Index",
-                            "Home",
-                            new { area = "" },
-                            new { @class = "nav-link" })
+                           "Home", 
+                           "Index", 
+                           "Home", 
+                           new { area = "" }, 
+                           new { @class = "nav-link" })
                     </li>
-                    <li class="nav-item">
+                    <li>
                         @Html.ActionLink(
-                            "Upload",
+                            "Upload Item Master",
                             "Index",
-                            "Upload",
-                            new { area = "" },
-                            new { @class = "nav-link" })
-                    </li>
-                    <li class="nav-item">
-                        @Html.ActionLink(
-                            "History",
-                            "Index",
-                            "UploadHistory",
-                            new { area = "" },
-                            new { @class = "nav-link" })
+                            "Upload")
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-
-    <div class="hardware-content">
+    <div class="container body-content">
         @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
