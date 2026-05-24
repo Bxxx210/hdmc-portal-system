@@ -151,21 +151,25 @@
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\SystemSettingsController.cs" />
     <Compile Include="Controllers\UserManagementController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DbConnectionFactory.cs" />
     <Compile Include="Models\CompanyModel.cs" />
+    <Compile Include="Models\SystemSettingModel.cs" />
     <Compile Include="Models\UserLoginModel.cs" />
     <Compile Include="Models\UserManagementModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CompanyRepository.cs" />
+    <Compile Include="Repositories\SystemSettingRepository.cs" />
     <Compile Include="Repositories\UserManagementRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\CompanySelectionService.cs" />
     <Compile Include="Services\SessionService.cs" />
+    <Compile Include="Services\SystemSettingService.cs" />
     <Compile Include="Services\UserManagementService.cs" />
     <Compile Include="Session\UserSessionModel.cs" />
   </ItemGroup>
@@ -219,6 +223,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\SystemSettings\Index.cshtml" />
     <Content Include="Views\Company\Index.cshtml" />
     <Content Include="Views\UserManagement\Index.cshtml" />
     <Content Include="Views\UserManagement\Create.cshtml" />

@@ -1,0 +1,42 @@
+using System.Web.Mvc;
+using HDMC.Portal.Models;
+using HDMC.Portal.Services;
+
+namespace HDMC.Portal.Controllers
+{
+    public class SystemSettingsController : Controller
+    {
+        private readonly SystemSettingService _systemSettingService;
+
+        public SystemSettingsController()
+            : this(new SystemSettingService())
+        {
+        }
+
+        public SystemSettingsController(
+            SystemSettingService systemSettingService)
+        {
+            _systemSettingService = systemSettingService;
+        }
+
+        [HttpGet]
+        public ActionResult Index()
+        {
+            var model =
+                _systemSettingService.GetSettings();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Index(SystemSettingModel model)
+        {
+            _systemSettingService.SaveSettings(model);
+
+            TempData["SuccessMessage"] =
+                "System settings saved";
+
+            return RedirectToAction("Index");
+        }
+    }
+}

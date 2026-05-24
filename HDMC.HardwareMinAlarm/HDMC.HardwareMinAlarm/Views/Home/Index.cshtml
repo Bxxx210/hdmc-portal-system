@@ -1,198 +1,215 @@
-﻿@{
+@{
     ViewBag.Title = "Hardware Min Alarm";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
+<main class="scan-page">
 
-    <div class="card shadow">
+    <section class="scan-header">
 
-        <div class="card-header">
+        <div>
+            <div class="scan-eyebrow">HDMC Hardware Min Alarm</div>
+            <h1>Scan Part</h1>
+        </div>
 
-            <div class="d-flex justify-content-between">
+        <div class="scan-user-panel">
+            <div>
+                <span>User</span>
+                <strong>@Session["UserName"]</strong>
+            </div>
+            <div>
+                <span>Company</span>
+                <strong>@Session["Company"]</strong>
+            </div>
+        </div>
 
-                <div>
-                    <strong>User:</strong>
-                    @Session["UserName"]
-                </div>
+    </section>
 
-                <div>
-                    <strong>Company:</strong>
-                    @Session["Company"]
-                </div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success scan-alert">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger scan-alert">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger scan-alert">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+
+    <section class="scan-panel">
+
+        <form method="post"
+              class="scan-form">
+
+            <label for="txtPartNumber">
+                Part Number
+            </label>
+
+            <div class="scan-input-row">
+
+                <input type="text"
+                       id="txtPartNumber"
+                       name="partNumber"
+                       class="form-control scan-input"
+                       autocomplete="off"
+                       autofocus />
+
+                <button type="submit"
+                        class="btn btn-primary scan-search-button">
+
+                    Search
+
+                </button>
 
             </div>
 
-        </div>
+        </form>
 
-        <div class="card-body">
-            @if (TempData["SuccessMessage"] != null)
-            {
-                <div class="alert alert-success">
+    </section>
 
-                    @TempData["SuccessMessage"]
+    @if (ViewBag.PartNumber != null)
+    {
+        <section class="part-panel">
 
+            <div class="part-title-row">
+                <div>
+                    <span>Part</span>
+                    <strong>@ViewBag.PartNumber</strong>
                 </div>
-            }
-
-            @if (TempData["ErrorMessage"] != null)
-            {
-                <div class="alert alert-danger">
-
-                    @TempData["ErrorMessage"]
-
+                <div>
+                    <span>Status</span>
+                    <strong>@(string.IsNullOrWhiteSpace(ViewBag.PartStatus as string) ? "-" : ViewBag.PartStatus)</strong>
                 </div>
-            }
+            </div>
 
-            @if (ViewBag.ErrorMessage != null)
-            {
-                <div class="alert alert-danger">
-                    @ViewBag.ErrorMessage
+            <div class="part-description">
+                @ViewBag.PartDescription
+            </div>
+
+            <dl class="part-detail-grid">
+                <div>
+                    <dt>From Location</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(ViewBag.LocationName as string) ? "-" : ViewBag.LocationName)</dd>
                 </div>
-            }
-
-            <form method="post">
-
-                <div class="mb-3">
-
-                    <label>
-                        Scan Part Number
-                    </label>
-
-                    <input type="text"
-                           id="txtPartNumber"
-                           name="partNumber"
-                           class="form-control form-control-lg"
-                           autofocus />
-
+                <div>
+                    <dt>Last User</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(ViewBag.UserStamp as string) ? "-" : ViewBag.UserStamp)</dd>
                 </div>
+            </dl>
 
-                <button class="btn btn-primary btn-lg w-100">
-                    Search
-                </button>
+        </section>
 
-            </form>
+        <section class="status-panel">
 
-            @if (ViewBag.PartNumber != null)
-            {
-                <hr />
+            <h2>Move To Location</h2>
 
-                <div class="mt-3">
+            <form method="post"
+                  action="@Url.Action(
+                      "SaveStatus",
+                      "Home")">
 
-                    <p>
-                        <strong>Part:</strong>
-                        @ViewBag.PartNumber
-                    </p>
+                <input type="hidden"
+                       name="partNumber"
+                       value="@ViewBag.PartNumber" />
 
-                    <p>
-                        <strong>Description:</strong>
-                        @ViewBag.PartDescription
-                    </p>
-
-                    <p>
-                        <strong>Current Status:</strong>
-                        @ViewBag.PartStatus
-                    </p>
-
-                    <p>
-                        <strong>From Location:</strong>
-                        @ViewBag.LocationName
-                    </p>
-
-                    <p>
-                        <strong>Last User:</strong>
-                        @ViewBag.UserStamp
-                    </p>
-
-                </div>
-
-                <hr />
-
-                <form method="post"
-                      action="@Url.Action(
-                          "SaveStatus",
-                          "Home")">
-
-                    <input type="hidden"
-                           name="PartNumber"
-                           value="@ViewBag.PartNumber" />
-
-                    <select id="ddlStatusCode" name="StatusCode"
-                            class="form-select form-select-lg mb-3">
-
-                        <option value="">
-                            Move To Location
-                        </option>
-
-                        <option value="100">
-                            100 - Request Replenish
-                        </option>
-
-                        <option value="200">
-                            200 - Kanban from MFG
-                        </option>
-
-                        <option value="300">
-                            300 - Stock min &lt;10 days
-                        </option>
-
-                        <option value="400">
-                            400 - Location discrepancy
-                        </option>
-
-                        <option value="500">
-                            500 - Check Shipment ETA
-                        </option>
-
-                        <option value="600">
-                            600 - ETA Today
-                        </option>
-
-                        <option value="900">
-                            900 - Replenish Completed
-                        </option>
-
-                    </select>
+                <div class="status-button-grid">
 
                     <button type="submit"
-                            class="btn btn-success btn-lg w-100">
+                            name="statusCode"
+                            value="100"
+                            class="btn status-action-button">
 
-                        Save Status
+                        <span>100</span>
+                        Request Replenish
 
                     </button>
 
-                </form>
-            }
+                    <button type="submit"
+                            name="statusCode"
+                            value="200"
+                            class="btn status-action-button">
 
-        </div>
+                        <span>200</span>
+                        Kanban from MFG
 
-    </div>
+                    </button>
 
-</div>
+                    <button type="submit"
+                            name="statusCode"
+                            value="300"
+                            class="btn status-action-button">
+
+                        <span>300</span>
+                        Stock min &lt;10 days
+
+                    </button>
+
+                    <button type="submit"
+                            name="statusCode"
+                            value="400"
+                            class="btn status-action-button">
+
+                        <span>400</span>
+                        Location discrepancy
+
+                    </button>
+
+                    <button type="submit"
+                            name="statusCode"
+                            value="500"
+                            class="btn status-action-button">
+
+                        <span>500</span>
+                        Check Shipment ETA
+
+                    </button>
+
+                    <button type="submit"
+                            name="statusCode"
+                            value="600"
+                            class="btn status-action-button">
+
+                        <span>600</span>
+                        ETA Today
+
+                    </button>
+
+                    <button type="submit"
+                            name="statusCode"
+                            value="900"
+                            class="btn status-action-button status-complete-button">
+
+                        <span>900</span>
+                        Replenish Completed
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+    }
+
+</main>
+
 <script>
-
-    window.onload = function ()
-    {
+    window.onload = function () {
         var partTextbox =
-            document.getElementById(
-                "txtPartNumber");
+            document.getElementById("txtPartNumber");
 
-        var statusDropdown =
-            document.getElementById(
-                "ddlStatusCode");
-
-        // Default focus on scan textbox
-        if (partTextbox)
-        {
+        if (partTextbox) {
             partTextbox.focus();
         }
-
-        // After successful scan,
-        // move focus to status dropdown
-        if (statusDropdown)
-        {
-            statusDropdown.focus();
-        }
     };
-
 </script>

@@ -1,0 +1,64 @@
+@model HDMC.Portal.Models.SystemSettingModel
+
+@{
+    ViewBag.Title = "System Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header">
+            <h4>System Settings</h4>
+        </div>
+
+        <div class="card-body">
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
+            <form method="post">
+
+                <div class="mb-3">
+
+                    <label>Hardware Entry URL</label>
+
+                    <input type="url"
+                           name="HardwareEntryUrl"
+                           value="@Model.HardwareEntryUrl"
+                           class="form-control"
+                           required />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Portal Login URL</label>
+
+                    <input type="url"
+                           name="PortalLoginUrl"
+                           value="@Model.PortalLoginUrl"
+                           class="form-control"
+                           required />
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    Save Settings
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

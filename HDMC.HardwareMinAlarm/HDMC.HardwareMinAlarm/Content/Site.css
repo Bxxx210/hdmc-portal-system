@@ -1,20 +1,237 @@
-﻿/* Set padding to keep content from hitting the edges */
-.body-content {
-    margin-top: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
+body.hardware-shell {
+    background: #eef2f6;
+    color: #17202a;
+    font-size: 16px;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+.hardware-navbar {
+    background: #18212c;
+    border-bottom: 3px solid #2f80ed;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
+.hardware-navbar .navbar-brand {
+    font-weight: 700;
+}
+
+.hardware-navbar .nav-link {
+    color: rgba(255, 255, 255, .86);
+    font-weight: 600;
+}
+
+.hardware-content {
+    margin: 0 auto;
+    max-width: 920px;
+    padding: 12px;
+}
+
+.scan-page {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.scan-header,
+.scan-panel,
+.part-panel,
+.status-panel {
+    background: #ffffff;
+    border: 1px solid #d8e1ea;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(23, 32, 42, .06);
+    padding: 14px;
+}
+
+.scan-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.scan-eyebrow {
+    color: #536579;
+    font-size: .82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.scan-header h1 {
+    font-size: 1.55rem;
+    font-weight: 800;
+    margin: 2px 0 0;
+}
+
+.scan-user-panel {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.scan-user-panel div,
+.part-title-row div,
+.part-detail-grid div {
+    background: #f5f8fb;
+    border: 1px solid #e0e8f0;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.scan-user-panel span,
+.part-title-row span,
+.part-detail-grid dt {
+    color: #5d6d7e;
+    display: block;
+    font-size: .78rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+}
+
+.scan-user-panel strong,
+.part-title-row strong,
+.part-detail-grid dd {
+    color: #17202a;
+    font-size: 1rem;
+    font-weight: 800;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.scan-alert {
+    border-radius: 8px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.scan-form label,
+.status-panel h2 {
+    color: #263442;
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.scan-input-row {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr;
+}
+
+.scan-input {
+    border: 2px solid #b9c7d6;
+    font-size: 1.25rem;
+    font-weight: 700;
+    height: 56px;
+    max-width: none;
+}
+
+.scan-search-button {
+    font-size: 1.12rem;
+    font-weight: 800;
+    min-height: 54px;
+}
+
+.part-title-row,
+.part-detail-grid {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.part-description {
+    background: #fff8e6;
+    border: 1px solid #f2d99b;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.part-detail-grid {
+    margin: 0;
+}
+
+.status-button-grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr;
+}
+
+.status-action-button {
+    align-items: center;
+    background: #f7fbff;
+    border: 2px solid #9db8d3;
+    color: #17202a;
+    display: flex;
+    font-size: 1rem;
+    font-weight: 800;
+    justify-content: flex-start;
+    min-height: 58px;
+    padding: 10px 12px;
+    text-align: left;
+    width: 100%;
+}
+
+.status-action-button span {
+    align-items: center;
+    background: #2f80ed;
+    border-radius: 6px;
+    color: #ffffff;
+    display: inline-flex;
+    flex: 0 0 52px;
+    font-size: 1rem;
+    height: 36px;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.status-action-button:hover,
+.status-action-button:focus {
+    background: #eaf3ff;
+    border-color: #2f80ed;
+    color: #17202a;
+}
+
+.status-complete-button {
+    background: #eefaf1;
+    border-color: #6fcf97;
+}
+
+.status-complete-button span {
+    background: #219653;
+}
+
 input,
 select,
 textarea {
-    max-width: 280px;
+    max-width: none;
+}
+
+@media (min-width: 576px) {
+    .scan-input-row {
+        grid-template-columns: 1fr 160px;
+    }
+
+    .status-button-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 380px) {
+    .hardware-content {
+        padding: 8px;
+    }
+
+    .scan-header,
+    .scan-panel,
+    .part-panel,
+    .status-panel {
+        padding: 10px;
+    }
+
+    .scan-user-panel,
+    .part-title-row,
+    .part-detail-grid {
+        grid-template-columns: 1fr;
+    }
 }

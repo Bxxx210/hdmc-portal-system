@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Configuration;
 using System.Web;
 using HDMC.Portal.Models;
 using HDMC.Portal.Repositories;
@@ -13,18 +12,24 @@ namespace HDMC.Portal.Services
 
         private readonly CompanyRepository _companyRepository;
         private readonly SessionService _sessionService;
+        private readonly SystemSettingService _systemSettingService;
 
         public CompanySelectionService()
-            : this(new CompanyRepository(), new SessionService())
+            : this(
+                  new CompanyRepository(),
+                  new SessionService(),
+                  new SystemSettingService())
         {
         }
 
         public CompanySelectionService(
             CompanyRepository companyRepository,
-            SessionService sessionService)
+            SessionService sessionService,
+            SystemSettingService systemSettingService)
         {
             _companyRepository = companyRepository;
             _sessionService = sessionService;
+            _systemSettingService = systemSettingService;
         }
 
         public bool IsLoggedIn(HttpSessionStateBase session)
@@ -57,15 +62,10 @@ namespace HDMC.Portal.Services
 
         private string GetHardwareEntryUrl()
         {
-            var configuredUrl =
-                ConfigurationManager.AppSettings["HardwareEntryUrl"];
-
-            if (string.IsNullOrWhiteSpace(configuredUrl))
-            {
-                return DefaultHardwareEntryUrl;
-            }
-
-            return configuredUrl;
+            return _systemSettingService.GetValue(
+                SystemSettingService.HardwareEntryUrlKey,
+                "HardwareEntryUrl",
+                DefaultHardwareEntryUrl);
         }
     }
 }

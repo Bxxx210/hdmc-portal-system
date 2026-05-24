@@ -1,11 +1,26 @@
-﻿using System.Configuration;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using HDMC.HardwareMinAlarm.Helpers;
+using HDMC.HardwareMinAlarm.Services;
 
 namespace HDMC.HardwareMinAlarm.Controllers
 {
     public class BaseController : Controller
     {
+        private const string DefaultPortalLoginUrl =
+            "https://localhost:44370/Login";
+
+        private readonly SystemSettingService _systemSettingService;
+
+        public BaseController()
+            : this(new SystemSettingService())
+        {
+        }
+
+        public BaseController(SystemSettingService systemSettingService)
+        {
+            _systemSettingService = systemSettingService;
+        }
+
         protected override void OnActionExecuting(
      ActionExecutingContext filterContext)
         {
@@ -38,15 +53,10 @@ namespace HDMC.HardwareMinAlarm.Controllers
 
         private string GetPortalLoginUrl()
         {
-            var configuredUrl =
-                ConfigurationManager.AppSettings["PortalLoginUrl"];
-
-            if (string.IsNullOrWhiteSpace(configuredUrl))
-            {
-                return "https://localhost:44370/Login";
-            }
-
-            return configuredUrl;
+            return _systemSettingService.GetValue(
+                SystemSettingService.PortalLoginUrlKey,
+                "PortalLoginUrl",
+                DefaultPortalLoginUrl);
         }
     }
 }
