@@ -36,7 +36,8 @@ namespace HDMC.HardwareMinAlarm.Controllers
             var result =
                 _uploadService.UploadItemMaster(
                     file,
-                    SessionHelper.GetCurrentUser().UserId);
+                    SessionHelper.GetCurrentUser().UserId,
+                    SessionHelper.GetCurrentUser().Company);
 
             return View(result);
         }

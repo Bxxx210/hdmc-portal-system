@@ -21,6 +21,14 @@ namespace HDMC.HardwareMinAlarm.Services
             HttpPostedFileBase file,
             string uploadedBy)
         {
+            return UploadItemMaster(file, uploadedBy, null);
+        }
+
+        public UploadResultModel UploadItemMaster(
+            HttpPostedFileBase file,
+            string uploadedBy,
+            string allowedCompany)
+        {
             var result =
                 new UploadResultModel
                 {
@@ -39,14 +47,16 @@ namespace HDMC.HardwareMinAlarm.Services
                         ProcessCsvFile(
                             file,
                             connection,
-                            result);
+                            result,
+                            allowedCompany);
                     }
                     else
                     {
                         ProcessExcelFile(
                             file,
                             connection,
-                            result);
+                            result,
+                            allowedCompany);
                     }
 
                     SaveImportLog(
@@ -71,7 +81,8 @@ namespace HDMC.HardwareMinAlarm.Services
         private void ProcessExcelFile(
             HttpPostedFileBase file,
             IDbConnection connection,
-            UploadResultModel result)
+            UploadResultModel result,
+            string allowedCompany)
         {
             using (var workbook = new XLWorkbook(file.InputStream))
             {
@@ -90,7 +101,8 @@ namespace HDMC.HardwareMinAlarm.Services
                             Company = row.Cell(1).GetString().Trim(),
                             Part = row.Cell(2).GetString().Trim(),
                             Description = row.Cell(3).GetString().Trim()
-                        });
+                        },
+                        allowedCompany);
                 }
             }
         }
@@ -98,7 +110,8 @@ namespace HDMC.HardwareMinAlarm.Services
         private void ProcessCsvFile(
             HttpPostedFileBase file,
             IDbConnection connection,
-            UploadResultModel result)
+            UploadResultModel result,
+            string allowedCompany)
         {
             using (var reader =
                    new StreamReader(file.InputStream))
@@ -121,7 +134,8 @@ namespace HDMC.HardwareMinAlarm.Services
                             Company = GetCsvColumn(columns, 0),
                             Part = GetCsvColumn(columns, 1),
                             Description = GetCsvColumn(columns, 2)
-                        });
+                        },
+                        allowedCompany);
                 }
             }
         }
@@ -129,7 +143,8 @@ namespace HDMC.HardwareMinAlarm.Services
         private void ProcessItemMasterRow(
             IDbConnection connection,
             UploadResultModel result,
-            ItemMasterRow row)
+            ItemMasterRow row,
+            string allowedCompany)
         {
             result.TotalRows++;
 
@@ -138,6 +153,20 @@ namespace HDMC.HardwareMinAlarm.Services
             {
                 result.Errors.Add(
                     $"Row {result.TotalRows}: Company or Part is empty");
+
+                result.FailedRows++;
+
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(allowedCompany) &&
+                !string.Equals(
+                    row.Company,
+                    allowedCompany,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                result.Errors.Add(
+                    $"Row {result.TotalRows}: Company [{row.Company}] is not allowed for this session");
 
                 result.FailedRows++;
 

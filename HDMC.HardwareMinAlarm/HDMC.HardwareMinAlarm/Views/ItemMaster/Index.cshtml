@@ -1,0 +1,135 @@
+﻿@using System.Linq
+@model HDMC.HardwareMinAlarm.Models.ItemMasterSearchViewModel
+
+@{
+    ViewBag.Title = "Item Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header">
+            <h4>Item Master</h4>
+        </div>
+
+        <div class="card-body">
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
+            <form method="get"
+                  class="row g-2 mb-3">
+
+                <div class="col-md-8">
+                    <input type="text"
+                           name="searchText"
+                           value="@Model.SearchText"
+                           class="form-control"
+                           placeholder="Search part no. or description" />
+                </div>
+
+                <div class="col-md-4">
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Search
+                    </button>
+
+                    <a href="@Url.Action("Index", "ItemMaster")"
+                       class="btn btn-secondary">
+                        Clear
+                    </a>
+                </div>
+
+            </form>
+
+            <form method="post"
+                  action="@Url.Action("Delete", "ItemMaster")"
+                  onsubmit="return confirm('Delete selected part(s)?');">
+
+                <input type="hidden"
+                       name="searchText"
+                       value="@Model.SearchText" />
+
+                <div class="mb-3">
+                    <button type="submit"
+                            class="btn btn-danger">
+                        Delete Selected
+                    </button>
+                </div>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width: 48px;">
+                                <input type="checkbox"
+                                       id="selectAll" />
+                            </th>
+                            <th>Company</th>
+                            <th>Part No.</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox"
+                                           name="selectedParts"
+                                           value="@item.Part"
+                                           class="part-checkbox" />
+                                </td>
+                                <td>@item.Company</td>
+                                <td>@item.Part</td>
+                                <td>@item.Description</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @if (!Model.Items.Any())
+                {
+                    <div class="alert alert-info">
+                        No item master records found
+                    </div>
+                }
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    (function () {
+        var selectAll =
+            document.getElementById("selectAll");
+
+        var checkboxes =
+            document.querySelectorAll(".part-checkbox");
+
+        if (selectAll) {
+            selectAll.addEventListener("change", function () {
+                for (var i = 0; i < checkboxes.length; i++) {
+                    checkboxes[i].checked = selectAll.checked;
+                }
+            });
+        }
+    })();
+</script>

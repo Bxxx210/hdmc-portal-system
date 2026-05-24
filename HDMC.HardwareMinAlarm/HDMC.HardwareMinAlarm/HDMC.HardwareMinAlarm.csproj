@@ -176,6 +176,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ItemMasterController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\UploadHistoryController.cs" />
     <Compile Include="Global.asax.cs">
@@ -183,15 +184,19 @@
     </Compile>
     <Compile Include="Helpers\DbConnectionFactory.cs" />
     <Compile Include="Helpers\SessionHelper.cs" />
+    <Compile Include="Models\ItemMasterModel.cs" />
+    <Compile Include="Models\ItemMasterSearchViewModel.cs" />
     <Compile Include="Models\PartSearchResultModel.cs" />
     <Compile Include="Models\SaveStatusRequestModel.cs" />
     <Compile Include="Models\UploadHistoryModel.cs" />
     <Compile Include="Models\UploadResultModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\HardwareRepository.cs" />
+    <Compile Include="Repositories\ItemMasterRepository.cs" />
     <Compile Include="Repositories\SystemSettingRepository.cs" />
     <Compile Include="Repositories\UploadRepository.cs" />
     <Compile Include="Services\HardwareWorkflowService.cs" />
+    <Compile Include="Services\ItemMasterService.cs" />
     <Compile Include="Services\StatusMappingService.cs" />
     <Compile Include="Services\SystemSettingService.cs" />
     <Compile Include="Services\UploadService.cs" />
@@ -246,6 +251,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\ItemMaster\Index.cshtml" />
     <Content Include="Views\Upload\Index.cshtml" />
     <Content Include="Views\UploadHistory\Index.cshtml" />
   </ItemGroup>
