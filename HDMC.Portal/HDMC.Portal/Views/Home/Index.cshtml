@@ -3,39 +3,42 @@
     ViewBag.Title = "Home";
 }
 
-<div class="page-shell">
-    <div class="page-header">
-        <div>
-            <h1 class="page-title">Welcome @Session["UserName"]</h1>
-            <p class="page-subtitle">Choose the system you want to continue working in.</p>
-        </div>
-    </div>
+<div class="container mt-5">
 
-    <div class="quick-links">
+    <h2>
+        Welcome @Session["UserName"]
+    </h2>
+
+    <hr />
+
+    <div class="list-group">
 
         <a href="@Url.Action(
              "Index",
              "Company")"
-           class="quick-link">
-            <div class="quick-link-title">Hardware Min Alarm</div>
-            <div class="quick-link-text">Open company selection and continue to the scanning workflow.</div>
+           class="list-group-item list-group-item-action">
+            Hardware Min Alarm
         </a>
 
         <a href="@Url.Action(
              "Index",
              "CountLocation")"
-           class="quick-link">
-            <div class="quick-link-title">Count Location Pick Face</div>
-            <div class="quick-link-text">Go to location counting operations.</div>
+           class="list-group-item list-group-item-action">
+
+            Count Location Pick Face
+
         </a>
 
         <a href="@Url.Action(
              "Index",
              "UserManagement")"
-           class="quick-link">
-            <div class="quick-link-title">User Management</div>
-            <div class="quick-link-text">Create users, manage role mapping, and reset passwords.</div>
+           class="list-group-item list-group-item-action">
+
+            User Management
+
+
         </a>
 
     </div>
+
 </div>

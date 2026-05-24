@@ -3,28 +3,29 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="page-shell">
-    <div class="page-header">
-        <div>
-            <h1 class="page-title">Hardware Scan</h1>
-            <p class="page-subtitle">Scan a part number, review the latest status, then save the next location update.</p>
-        </div>
-    </div>
+<div class="container mt-4">
 
-    <div class="scan-shell">
-        <div class="scan-session-bar">
-            <div>
-                <span class="session-item-label">User</span>
-                <span class="session-item-value">@Session["UserName"]</span>
+    <div class="card shadow">
+
+        <div class="card-header">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+                    <strong>User:</strong>
+                    @Session["UserName"]
+                </div>
+
+                <div>
+                    <strong>Company:</strong>
+                    @Session["Company"]
+                </div>
+
             </div>
-            <div>
-                <span class="session-item-label">Company</span>
-                <span class="session-item-value">@Session["Company"]</span>
-            </div>
+
         </div>
 
-        <div class="surface-panel">
-            <div class="panel-body">
+        <div class="card-body">
             @if (TempData["SuccessMessage"] != null)
             {
                 <div class="alert alert-success">
@@ -51,50 +52,61 @@
             }
 
             <form method="post">
-                <div class="scan-form-row">
-                    <div class="scan-form-input">
-                        <label class="form-label">Scan Part Number</label>
-                        <input type="text"
-                               id="txtPartNumber"
-                               name="partNumber"
-                               class="form-control scan-input"
-                               autofocus />
-                    </div>
 
-                    <button class="btn btn-primary scan-action-button">
-                        Search
-                    </button>
+                <div class="mb-3">
+
+                    <label>
+                        Scan Part Number
+                    </label>
+
+                    <input type="text"
+                           id="txtPartNumber"
+                           name="partNumber"
+                           class="form-control form-control-lg"
+                           autofocus />
+
                 </div>
+
+                <button class="btn btn-primary btn-lg w-100">
+                    Search
+                </button>
+
             </form>
 
             @if (ViewBag.PartNumber != null)
             {
-                <div class="section-divider"></div>
+                <hr />
 
-                <div class="detail-grid">
-                    <div class="detail-item">
-                        <span class="detail-label">Part</span>
-                        <span class="detail-value">@ViewBag.PartNumber</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Description</span>
-                        <span class="detail-value">@ViewBag.PartDescription</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Current Status</span>
-                        <span class="detail-value">@ViewBag.PartStatus</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">From Location</span>
-                        <span class="detail-value">@ViewBag.LocationName</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Last User</span>
-                        <span class="detail-value">@ViewBag.UserStamp</span>
-                    </div>
+                <div class="mt-3">
+
+                    <p>
+                        <strong>Part:</strong>
+                        @ViewBag.PartNumber
+                    </p>
+
+                    <p>
+                        <strong>Description:</strong>
+                        @ViewBag.PartDescription
+                    </p>
+
+                    <p>
+                        <strong>Current Status:</strong>
+                        @ViewBag.PartStatus
+                    </p>
+
+                    <p>
+                        <strong>From Location:</strong>
+                        @ViewBag.LocationName
+                    </p>
+
+                    <p>
+                        <strong>Last User:</strong>
+                        @ViewBag.UserStamp
+                    </p>
+
                 </div>
 
-                <div class="section-divider"></div>
+                <hr />
 
                 <form method="post"
                       action="@Url.Action(
@@ -105,59 +117,57 @@
                            name="PartNumber"
                            value="@ViewBag.PartNumber" />
 
-                    <div class="status-form-row">
-                        <div class="status-select-wrap">
-                            <label class="form-label" for="ddlStatusCode">Move To Location</label>
-                            <select id="ddlStatusCode" name="StatusCode"
-                                    class="form-select">
+                    <select id="ddlStatusCode" name="StatusCode"
+                            class="form-select form-select-lg mb-3">
 
-                                <option value="">
-                                    Move To Location
-                                </option>
+                        <option value="">
+                            Move To Location
+                        </option>
 
-                                <option value="100">
-                                    100 - Request Replenish
-                                </option>
+                        <option value="100">
+                            100 - Request Replenish
+                        </option>
 
-                                <option value="200">
-                                    200 - Kanban from MFG
-                                </option>
+                        <option value="200">
+                            200 - Kanban from MFG
+                        </option>
 
-                                <option value="300">
-                                    300 - Stock min &lt;10 days
-                                </option>
+                        <option value="300">
+                            300 - Stock min &lt;10 days
+                        </option>
 
-                                <option value="400">
-                                    400 - Location discrepancy
-                                </option>
+                        <option value="400">
+                            400 - Location discrepancy
+                        </option>
 
-                                <option value="500">
-                                    500 - Check Shipment ETA
-                                </option>
+                        <option value="500">
+                            500 - Check Shipment ETA
+                        </option>
 
-                                <option value="600">
-                                    600 - ETA Today
-                                </option>
+                        <option value="600">
+                            600 - ETA Today
+                        </option>
 
-                                <option value="900">
-                                    900 - Replenish Completed
-                                </option>
+                        <option value="900">
+                            900 - Replenish Completed
+                        </option>
 
-                            </select>
-                        </div>
+                    </select>
 
-                        <button type="submit"
-                                class="btn btn-success status-save-button">
-                            Save Status
-                        </button>
-                    </div>
+                    <button type="submit"
+                            class="btn btn-success btn-lg w-100">
+
+                        Save Status
+
+                    </button>
 
                 </form>
             }
 
         </div>
-        </div>
+
     </div>
+
 </div>
 <script>
 
