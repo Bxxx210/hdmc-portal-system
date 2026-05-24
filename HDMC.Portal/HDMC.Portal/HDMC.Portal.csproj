@@ -159,6 +159,7 @@
     </Compile>
     <Compile Include="Helpers\DbConnectionFactory.cs" />
     <Compile Include="Models\CompanyModel.cs" />
+    <Compile Include="Models\RoleModel.cs" />
     <Compile Include="Models\SystemSettingModel.cs" />
     <Compile Include="Models\UserLoginModel.cs" />
     <Compile Include="Models\UserManagementModel.cs" />
@@ -228,6 +229,7 @@
     <Content Include="Views\Company\Index.cshtml" />
     <Content Include="Views\UserManagement\Index.cshtml" />
     <Content Include="Views\UserManagement\Create.cshtml" />
+    <Content Include="Views\UserManagement\Edit.cshtml" />
     <Content Include="Views\UserManagement\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>

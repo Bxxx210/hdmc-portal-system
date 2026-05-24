@@ -3,7 +3,7 @@
 @model HDMC.Portal.Models.UserManagementModel
 
 @{
-    ViewBag.Title = "Create User";
+    ViewBag.Title = "Edit User";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,7 +12,7 @@
     <div class="card shadow">
 
         <div class="card-header">
-            <h4>Create User</h4>
+            <h4>Edit User</h4>
         </div>
 
         <div class="card-body">
@@ -26,14 +26,18 @@
 
             <form method="post">
 
+                <input type="hidden"
+                       name="UserId"
+                       value="@Model.UserId" />
+
                 <div class="mb-3">
 
                     <label>User ID</label>
 
                     <input type="text"
-                           name="UserId"
+                           value="@Model.UserId"
                            class="form-control"
-                           required />
+                           disabled />
 
                 </div>
 
@@ -43,28 +47,7 @@
 
                     <input type="text"
                            name="UserName"
-                           class="form-control"
-                           required />
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label>Password</label>
-
-                    <input type="password"
-                           name="password"
-                           class="form-control"
-                           required />
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label>Confirm Password</label>
-
-                    <input type="password"
-                           name="confirmPassword"
+                           value="@Model.UserName"
                            class="form-control"
                            required />
 
@@ -94,12 +77,37 @@
 
                 </div>
 
+                <div class="form-check mb-3">
+
+                    <input type="checkbox"
+                           name="IsActive"
+                           value="true"
+                           class="form-check-input"
+                           id="IsActive"
+                           @(Model.IsActive ? "checked" : string.Empty) />
+
+                    <input type="hidden"
+                           name="IsActive"
+                           value="false" />
+
+                    <label class="form-check-label"
+                           for="IsActive">
+                        Active
+                    </label>
+
+                </div>
+
                 <button type="submit"
                         class="btn btn-primary">
 
-                    Create User
+                    Save
 
                 </button>
+
+                <a href="@Url.Action("Index", "UserManagement")"
+                   class="btn btn-secondary">
+                    Back
+                </a>
 
             </form>
 

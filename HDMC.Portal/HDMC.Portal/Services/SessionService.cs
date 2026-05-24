@@ -36,5 +36,22 @@ namespace HDMC.Portal.Services
         {
             return session[UserNameKey]?.ToString();
         }
+
+        public int GetRoleId(HttpSessionStateBase session)
+        {
+            if (session == null ||
+                session[RoleIdKey] == null)
+            {
+                return 0;
+            }
+
+            int roleId;
+
+            return int.TryParse(
+                session[RoleIdKey].ToString(),
+                out roleId)
+                ? roleId
+                : 0;
+        }
     }
 }

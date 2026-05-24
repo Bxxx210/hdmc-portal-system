@@ -1,5 +1,7 @@
-﻿using System.Web;
+﻿using System.Text;
+using System.Web;
 using System.Web.Mvc;
+using HDMC.HardwareMinAlarm.Helpers;
 using HDMC.HardwareMinAlarm.Services;
 
 namespace HDMC.HardwareMinAlarm.Controllers
@@ -32,9 +34,23 @@ namespace HDMC.HardwareMinAlarm.Controllers
             }
 
             var result =
-                _uploadService.UploadItemMaster(file);
+                _uploadService.UploadItemMaster(
+                    file,
+                    SessionHelper.GetCurrentUser().UserId);
 
             return View(result);
+        }
+
+        [HttpGet]
+        public ActionResult Template()
+        {
+            var content =
+                "Company,Part,Description\r\n3047,PART001,Sample description\r\n";
+
+            return File(
+                Encoding.UTF8.GetBytes(content),
+                "text/csv",
+                "item-master-template.csv");
         }
     }
 }

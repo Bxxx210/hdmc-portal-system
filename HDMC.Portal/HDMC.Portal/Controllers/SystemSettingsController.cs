@@ -8,6 +8,11 @@ namespace HDMC.Portal.Controllers
     {
         private readonly SystemSettingService _systemSettingService;
 
+        protected override bool RequireAdminAccess
+        {
+            get { return true; }
+        }
+
         public SystemSettingsController()
             : this(new SystemSettingService())
         {

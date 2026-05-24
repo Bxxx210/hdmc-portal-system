@@ -5,7 +5,14 @@ namespace HDMC.Portal.Controllers
 {
     public class BaseController : Controller
     {
+        private const int AdminRoleId = 1;
+
         private readonly SessionService _sessionService;
+
+        protected virtual bool RequireAdminAccess
+        {
+            get { return false; }
+        }
 
         public BaseController()
             : this(new SessionService())
@@ -24,6 +31,24 @@ namespace HDMC.Portal.Controllers
             {
                 filterContext.Result =
                     RedirectToAction("Index", "Login");
+
+                base.OnActionExecuting(filterContext);
+
+                return;
+            }
+
+            if (RequireAdminAccess &&
+                _sessionService.GetRoleId(Session) != AdminRoleId)
+            {
+                TempData["ErrorMessage"] =
+                    "You do not have permission to access this page";
+
+                filterContext.Result =
+                    RedirectToAction("Index", "Home");
+
+                base.OnActionExecuting(filterContext);
+
+                return;
             }
 
             base.OnActionExecuting(filterContext);
