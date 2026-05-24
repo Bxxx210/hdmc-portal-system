@@ -124,77 +124,112 @@
 
                 <div class="status-button-grid">
 
-                    <button type="submit"
-                            name="statusCode"
-                            value="100"
-                            class="btn status-action-button">
+                    <input type="radio"
+                           id="status100"
+                           name="statusCode"
+                           value="100"
+                           class="status-radio" />
+
+                    <label for="status100"
+                           class="status-action-button">
 
                         <span>100</span>
                         Request Replenish
 
-                    </button>
+                    </label>
 
-                    <button type="submit"
-                            name="statusCode"
-                            value="200"
-                            class="btn status-action-button">
+                    <input type="radio"
+                           id="status200"
+                           name="statusCode"
+                           value="200"
+                           class="status-radio" />
+
+                    <label for="status200"
+                           class="status-action-button">
 
                         <span>200</span>
                         Kanban from MFG
 
-                    </button>
+                    </label>
 
-                    <button type="submit"
-                            name="statusCode"
-                            value="300"
-                            class="btn status-action-button">
+                    <input type="radio"
+                           id="status300"
+                           name="statusCode"
+                           value="300"
+                           class="status-radio" />
+
+                    <label for="status300"
+                           class="status-action-button">
 
                         <span>300</span>
                         Stock min &lt;10 days
 
-                    </button>
+                    </label>
 
-                    <button type="submit"
-                            name="statusCode"
-                            value="400"
-                            class="btn status-action-button">
+                    <input type="radio"
+                           id="status400"
+                           name="statusCode"
+                           value="400"
+                           class="status-radio" />
+
+                    <label for="status400"
+                           class="status-action-button">
 
                         <span>400</span>
                         Location discrepancy
 
-                    </button>
+                    </label>
 
-                    <button type="submit"
-                            name="statusCode"
-                            value="500"
-                            class="btn status-action-button">
+                    <input type="radio"
+                           id="status500"
+                           name="statusCode"
+                           value="500"
+                           class="status-radio" />
+
+                    <label for="status500"
+                           class="status-action-button">
 
                         <span>500</span>
                         Check Shipment ETA
 
-                    </button>
+                    </label>
 
-                    <button type="submit"
-                            name="statusCode"
-                            value="600"
-                            class="btn status-action-button">
+                    <input type="radio"
+                           id="status600"
+                           name="statusCode"
+                           value="600"
+                           class="status-radio" />
+
+                    <label for="status600"
+                           class="status-action-button">
 
                         <span>600</span>
                         ETA Today
 
-                    </button>
+                    </label>
 
-                    <button type="submit"
-                            name="statusCode"
-                            value="900"
-                            class="btn status-action-button status-complete-button">
+                    <input type="radio"
+                           id="status900"
+                           name="statusCode"
+                           value="900"
+                           class="status-radio" />
+
+                    <label for="status900"
+                           class="status-action-button status-complete-button">
 
                         <span>900</span>
                         Replenish Completed
 
-                    </button>
+                    </label>
 
                 </div>
+
+                <button type="submit"
+                        class="btn btn-success save-status-button">
+
+                    Save Status
+
+                </button>
 
             </form>
 
