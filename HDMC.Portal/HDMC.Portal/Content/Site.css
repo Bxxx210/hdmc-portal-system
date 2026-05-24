@@ -1,20 +1,276 @@
-﻿/* Set padding to keep content from hitting the edges */
-.body-content {
-    margin-top: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
+body {
+    background: #f4f6f8;
+    color: #1f2933;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
+.app-shell {
+    min-height: 100vh;
+}
+
+.app-container {
+    max-width: 1180px;
+}
+
+.body-content {
+    margin-top: 24px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 24px;
+}
+
+.app-navbar {
+    background: #ffffff;
+    border-bottom: 1px solid #d8dee4;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.app-navbar-brand {
+    color: #0f172a;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.app-navbar-brand:hover,
+.app-navbar-brand:focus {
+    color: #0f172a;
+}
+
+.app-nav-links {
+    gap: 4px;
+}
+
+.app-nav-link {
+    color: #475467 !important;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 8px 12px !important;
+}
+
+.app-nav-link:hover,
+.app-nav-link:focus {
+    color: #0f172a !important;
+    background: #eef2f6;
+}
+
+.app-footer {
+    margin-top: 24px;
+    padding-top: 12px;
+    border-top: 1px solid #dde3ea;
+    color: #667085;
+    font-size: 13px;
+}
+
+.page-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    color: #101828;
+}
+
+.page-subtitle {
+    margin: 4px 0 0;
+    color: #667085;
+    font-size: 14px;
+}
+
+.surface-panel {
+    background: #ffffff;
+    border: 1px solid #dde3ea;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05);
+}
+
+.surface-panel.compact-panel {
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.panel-header {
+    padding: 18px 20px 10px;
+    border-bottom: 1px solid #edf1f5;
+}
+
+.panel-header h1,
+.panel-header h2,
+.panel-header h3,
+.panel-header h4 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #101828;
+}
+
+.panel-meta {
+    margin-top: 6px;
+    color: #667085;
+    font-size: 13px;
+}
+
+.panel-body {
+    padding: 20px;
+}
+
+.form-label {
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #344054;
+}
+
+.form-control,
+.form-select,
+input,
+select,
+textarea {
+    max-width: 100%;
+    min-height: 40px;
+    border-color: #cfd8e3;
+    border-radius: 8px;
+    box-shadow: none;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #7aa2d7;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: #1e40af;
+    border-color: #1e40af;
+}
+
+.btn-success {
+    background: #157347;
+    border-color: #157347;
+}
+
+.btn-warning {
+    color: #1f2937;
+}
+
+.table-shell {
+    overflow-x: auto;
+}
+
+.table-enterprise {
+    margin-bottom: 0;
+    color: #1f2937;
+}
+
+.table-enterprise thead th {
+    background: #f8fafc;
+    color: #475467;
+    font-size: 13px;
+    font-weight: 600;
+    border-bottom-width: 1px;
+    white-space: nowrap;
+}
+
+.table-enterprise td,
+.table-enterprise th {
+    padding: 12px 14px;
+    vertical-align: middle;
+}
+
+.status-chip {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #eef2f6;
+    color: #344054;
+}
+
+.status-chip.is-active {
+    background: #e8f7ee;
+    color: #157347;
+}
+
+.quick-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.quick-link {
+    display: block;
+    padding: 16px 18px;
+    background: #ffffff;
+    border: 1px solid #dde3ea;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    color: #101828;
+    text-decoration: none;
+}
+
+.quick-link:hover,
+.quick-link:focus {
+    background: #f8fafc;
+    color: #101828;
+    text-decoration: none;
+}
+
+.quick-link-title {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.quick-link-text {
+    margin-top: 4px;
+    color: #667085;
+    font-size: 13px;
+}
+
 .dl-horizontal dt {
     white-space: normal;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+@media (max-width: 767.98px) {
+    .body-content {
+        margin-top: 16px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .page-title {
+        font-size: 22px;
+    }
+
+    .panel-header,
+    .panel-body {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
 }

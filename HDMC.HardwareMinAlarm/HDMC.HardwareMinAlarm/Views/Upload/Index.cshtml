@@ -5,15 +5,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
-
-    <div class="card shadow">
-
-        <div class="card-header">
-            <h4>Upload Item Master</h4>
+<div class="page-shell">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Upload Item Master</h1>
+            <p class="page-subtitle">Import item master data from Excel and review the result immediately.</p>
         </div>
+    </div>
 
-        <div class="card-body">
+    <div class="surface-panel">
+        <div class="panel-body upload-grid">
 
             @if (ViewBag.ErrorMessage != null)
             {
@@ -23,68 +24,65 @@
             }
 
             <form method="post"
-                  enctype="multipart/form-data">
+                  enctype="multipart/form-data"
+                  class="row g-3 align-items-end">
 
-                <div class="mb-3">
-
+                <div class="col-lg-8">
+                    <label class="form-label">Excel File</label>
                     <input type="file"
                            name="file"
                            class="form-control"
                            accept=".xlsx,.xls,.csv" />
-
                 </div>
 
-                <button type="submit"
-                        class="btn btn-primary">
-
-                    Upload
-
-                </button>
-
+                <div class="col-lg-4">
+                    <button type="submit"
+                            class="btn btn-primary w-100">
+                        Upload
+                    </button>
+                </div>
             </form>
 
             @if (Model != null)
             {
-                <hr />
+                <div class="section-divider"></div>
 
-                <p>
-                    <strong>Total:</strong>
-                    @Model.TotalRows
-                </p>
+                <div class="result-summary">
+                    <div class="summary-box">
+                        <span class="summary-label">Total</span>
+                        <span class="summary-value">@Model.TotalRows</span>
+                    </div>
+                    <div class="summary-box">
+                        <span class="summary-label">Success</span>
+                        <span class="summary-value">@Model.SuccessRows</span>
+                    </div>
+                    <div class="summary-box">
+                        <span class="summary-label">Failed</span>
+                        <span class="summary-value">@Model.FailedRows</span>
+                    </div>
+                </div>
 
-                <p>
-                    <strong>Success:</strong>
-                    @Model.SuccessRows
-                </p>
+                if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                {
+                    <div class="alert alert-warning mt-3 mb-0">
+                        @Model.ErrorMessage
+                    </div>
+                }
 
-                <p>
-                    <strong>Failed:</strong>
-                    @Model.FailedRows
-                </p>
-
-                <p>
-                    <strong>Error:</strong>
-                    @Model.ErrorMessage
-                    @if (Model.Errors != null &&
-                     Model.Errors.Any())
-                    {
-                        <hr />
-
-                        <ul class="text-danger">
-
+                if (Model.Errors != null &&
+                    Model.Errors.Any())
+                {
+                    <div class="alert alert-danger mt-3 mb-0">
+                        <ul class="mb-0 ps-3">
                             @foreach (var error in Model.Errors)
                             {
                                 <li>@error</li>
                             }
-
                         </ul>
-                    }
-                </p>
-
+                    </div>
+                }
             }
 
         </div>
-
     </div>
-
 </div>

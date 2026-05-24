@@ -5,15 +5,22 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
-
-    <div class="card shadow">
-
-        <div class="card-header">
-            <h4>User Management</h4>
+<div class="page-shell">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">User Management</h1>
+            <p class="page-subtitle">Manage portal access, company mapping, and password reset flow.</p>
         </div>
+        <a href="@Url.Action(
+             "UserManagement",
+             "Create")"
+           class="btn btn-success">
+            Create User
+        </a>
+    </div>
 
-        <div class="card-body">
+    <div class="surface-panel">
+        <div class="panel-body">
             @if (TempData["SuccessMessage"] != null)
             {
                 <div class="alert alert-success">
@@ -21,20 +28,8 @@
                 </div>
             }
 
-            <div class="mb-3">
-
-                <a href="@Url.Action(
-                     "UserManagement",
-                     "Create")"
-                   class="btn btn-success">
-
-                    Create User
-
-                </a>
-
-            </div>
-
-            <table class="table table-bordered">
+            <div class="table-shell">
+            <table class="table table-enterprise table-bordered">
 
                 <thead>
 
@@ -64,9 +59,11 @@
                             <td>@item.RoleName</td>
 
                             <td>
-                                @(item.IsActive
-                                    ? "Active"
-                                    : "Inactive")
+                                <span class="status-chip @(item.IsActive ? "is-active" : string.Empty)">
+                                    @(item.IsActive
+                                        ? "Active"
+                                        : "Inactive")
+                                </span>
                             </td>
 
                             <td>
@@ -90,9 +87,9 @@
                 </tbody>
 
             </table>
+            </div>
 
         </div>
 
     </div>
-
 </div>
