@@ -4,7 +4,7 @@ using HDMC.Portal.Services;
 
 namespace HDMC.Portal.Controllers
 {
-    public class SystemSettingsController : Controller
+    public class SystemSettingsController : BaseController
     {
         private readonly SystemSettingService _systemSettingService;
 

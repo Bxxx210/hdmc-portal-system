@@ -3,7 +3,7 @@ using HDMC.Portal.Services;
 
 namespace HDMC.Portal.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly SessionService _sessionService;
 

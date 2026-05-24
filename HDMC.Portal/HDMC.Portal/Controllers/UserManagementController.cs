@@ -4,7 +4,7 @@ using HDMC.Portal.Services;
 
 namespace HDMC.Portal.Controllers
 {
-    public class UserManagementController : Controller
+    public class UserManagementController : BaseController
     {
         private readonly UserManagementService
             _userManagementService;

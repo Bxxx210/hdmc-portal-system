@@ -3,7 +3,7 @@ using HDMC.Portal.Services;
 
 namespace HDMC.Portal.Controllers
 {
-    public class CompanyController : Controller
+    public class CompanyController : BaseController
     {
         private readonly CompanySelectionService _companySelectionService;
 
