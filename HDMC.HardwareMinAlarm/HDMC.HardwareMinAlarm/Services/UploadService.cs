@@ -12,18 +12,6 @@ namespace HDMC.HardwareMinAlarm.Services
 {
     public class UploadService
     {
-        public UploadResultModel UploadItemMaster(HttpPostedFileBase file)
-        {
-            return UploadItemMaster(file, "SYSTEM");
-        }
-
-        public UploadResultModel UploadItemMaster(
-            HttpPostedFileBase file,
-            string uploadedBy)
-        {
-            return UploadItemMaster(file, uploadedBy, null);
-        }
-
         public UploadResultModel UploadItemMaster(
             HttpPostedFileBase file,
             string uploadedBy,
@@ -34,6 +22,14 @@ namespace HDMC.HardwareMinAlarm.Services
                 {
                     FileName = file.FileName
                 };
+
+            if (string.IsNullOrWhiteSpace(allowedCompany))
+            {
+                result.ErrorMessage =
+                    "Please select company before upload";
+
+                return result;
+            }
 
             try
             {
@@ -174,40 +170,9 @@ namespace HDMC.HardwareMinAlarm.Services
                 return;
             }
 
-            if (!IsValidCompany(connection, row.Company))
-            {
-                result.Errors.Add(
-                    $"Row {result.TotalRows}: Invalid company [{row.Company}]");
-
-                result.FailedRows++;
-
-                return;
-            }
-
             UpsertItemMaster(connection, row);
 
             result.SuccessRows++;
-        }
-
-        private bool IsValidCompany(
-            IDbConnection connection,
-            string company)
-        {
-            const string sql = @"
-                SELECT COUNT(1)
-                FROM Companies
-                WHERE company_code = @Company
-                AND is_active = 1";
-
-            var validCompany =
-                connection.ExecuteScalar<int>(
-                    sql,
-                    new
-                    {
-                        Company = company
-                    });
-
-            return validCompany > 0;
         }
 
         private void UpsertItemMaster(
