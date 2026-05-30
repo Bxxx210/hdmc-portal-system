@@ -56,11 +56,11 @@
         transition: transform 0.2s;
     }
 
-    .toggle-switch input:checked + .toggle-slider {
+    .toggle-switch input[type="checkbox"]:checked ~ .toggle-slider {
         background: #1a56db;
     }
 
-    .toggle-switch input:checked + .toggle-slider:before {
+    .toggle-switch input[type="checkbox"]:checked ~ .toggle-slider:before {
         transform: translateX(20px);
     }
 </style>

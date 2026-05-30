@@ -179,75 +179,33 @@ namespace HDMC.HardwareMinAlarm.Services
             IDbConnection connection,
             ItemMasterRow row)
         {
-            if (ItemExists(connection, row))
-            {
-                UpdateItemMaster(connection, row);
-
-                return;
-            }
-
-            InsertItemMaster(connection, row);
-        }
-
-        private bool ItemExists(
-            IDbConnection connection,
-            ItemMasterRow row)
-        {
             const string sql = @"
-                SELECT COUNT(1)
-                FROM Item_master
-                WHERE company = @Company
-                AND Part = @Part";
-
-            var exists =
-                connection.ExecuteScalar<int>(
-                    sql,
-                    new
-                    {
-                        Company = row.Company,
-                        Part = row.Part
-                    });
-
-            return exists > 0;
-        }
-
-        private void UpdateItemMaster(
-            IDbConnection connection,
-            ItemMasterRow row)
-        {
-            const string sql = @"
-                UPDATE Item_master
-                SET Description = @Description
-                WHERE company = @Company
-                AND Part = @Part";
-
-            connection.Execute(
-                sql,
-                new
-                {
-                    Company = row.Company,
-                    Part = row.Part,
-                    Description = row.Description
-                });
-        }
-
-        private void InsertItemMaster(
-            IDbConnection connection,
-            ItemMasterRow row)
-        {
-            const string sql = @"
-                INSERT INTO Item_master
+                MERGE Item_master AS target
+                USING
                 (
-                    company,
-                    Part,
-                    Description
-                )
-                VALUES
-                (
-                    @Company,
-                    @Part,
-                    @Description
-                )";
+                    SELECT
+                        @Company AS company,
+                        @Part AS Part,
+                        @Description AS Description
+                ) AS source
+                ON target.company = source.company
+                AND target.Part = source.Part
+                WHEN MATCHED THEN
+                    UPDATE SET
+                        Description = source.Description
+                WHEN NOT MATCHED THEN
+                    INSERT
+                    (
+                        company,
+                        Part,
+                        Description
+                    )
+                    VALUES
+                    (
+                        source.company,
+                        source.Part,
+                        source.Description
+                    );";
 
             connection.Execute(
                 sql,
