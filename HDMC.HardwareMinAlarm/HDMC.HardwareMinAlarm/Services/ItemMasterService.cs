@@ -25,8 +25,14 @@ namespace HDMC.HardwareMinAlarm.Services
             return new ItemMasterSearchViewModel
             {
                 SearchText = searchText,
-                Items = _repository.Search(company, searchText)
+                Items = _repository.Search(company, searchText),
+                TotalCount = _repository.Count(company, searchText)
             };
+        }
+
+        public List<ItemMasterModel> GetAll(string company)
+        {
+            return _repository.GetAll(company);
         }
 
         public int DeleteParts(

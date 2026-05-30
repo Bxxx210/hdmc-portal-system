@@ -1,5 +1,4 @@
-﻿using System.Text;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using HDMC.HardwareMinAlarm.Helpers;
 using HDMC.HardwareMinAlarm.Services;
@@ -9,6 +8,7 @@ namespace HDMC.HardwareMinAlarm.Controllers
     public class UploadController : BaseController
     {
         private readonly UploadService _uploadService;
+        private readonly ItemMasterWorkbookService _workbookService;
 
         protected override bool RequireElevatedAccess
         {
@@ -23,6 +23,7 @@ namespace HDMC.HardwareMinAlarm.Controllers
         public UploadController()
         {
             _uploadService = new UploadService();
+            _workbookService = new ItemMasterWorkbookService();
         }
 
         [HttpGet]
@@ -56,13 +57,13 @@ namespace HDMC.HardwareMinAlarm.Controllers
         [HttpGet]
         public ActionResult Template()
         {
-            var content =
-                "Company,Part,Description\r\n3047,PART001,Sample description\r\n";
+            var company =
+                SessionHelper.GetCurrentUser().Company;
 
             return File(
-                Encoding.UTF8.GetBytes(content),
-                "text/csv",
-                "item-master-template.csv");
+                _workbookService.CreateTemplate(company),
+                ItemMasterWorkbookService.ExcelContentType,
+                "item-master-template-" + company + ".xlsx");
         }
     }
 }

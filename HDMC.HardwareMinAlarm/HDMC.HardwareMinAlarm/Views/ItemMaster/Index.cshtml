@@ -6,54 +6,69 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
+<div class="item-master-wrapper">
+    <div class="item-master-heading">
+        <div>
+            <div class="menu-eyebrow">Hardware Min Alarm</div>
+            <h1 class="menu-title">Item Master</h1>
+            <div class="menu-hint">
+                Manage parts for company <strong>@Session["Company"]</strong>.
+                The table previews up to 200 rows. Export downloads the complete data set.
+            </div>
+        </div>
+        <a href="@Url.Action("Export", "ItemMaster")"
+           class="btn btn-outline-primary">
+            Export Excel
+        </a>
+    </div>
 
-    <div class="card shadow">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
 
-        <div class="card-header">
-            <h4>Item Master</h4>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="item-master-card">
+        <div class="item-master-toolbar">
+            <form method="get"
+                  class="item-master-search">
+                <input type="text"
+                       name="searchText"
+                       value="@Model.SearchText"
+                       class="form-control"
+                       placeholder="Search part no. or description" />
+                <button type="submit"
+                        class="btn btn-primary">
+                    Search
+                </button>
+                <a href="@Url.Action("Index", "ItemMaster")"
+                   class="btn btn-light">
+                    Clear
+                </a>
+            </form>
+
+            <div class="item-master-count">
+                Showing <strong>@Model.Items.Count</strong>
+                of <strong>@Model.TotalCount</strong> record(s)
+            </div>
         </div>
 
-        <div class="card-body">
-
-            @if (TempData["SuccessMessage"] != null)
+        <div class="item-master-table-wrapper">
+            @if (Model.TotalCount > Model.Items.Count)
             {
-                <div class="alert alert-success">
-                    @TempData["SuccessMessage"]
+                <div class="item-master-preview-note">
+                    Preview limited to the first @Model.Items.Count record(s).
+                    Use Export Excel to review the complete data set.
                 </div>
             }
-
-            @if (TempData["ErrorMessage"] != null)
-            {
-                <div class="alert alert-danger">
-                    @TempData["ErrorMessage"]
-                </div>
-            }
-
-            <form method="get"
-                  class="row g-2 mb-3">
-
-                <div class="col-md-8">
-                    <input type="text"
-                           name="searchText"
-                           value="@Model.SearchText"
-                           class="form-control"
-                           placeholder="Search part no. or description" />
-                </div>
-
-                <div class="col-md-4">
-                    <button type="submit"
-                            class="btn btn-primary">
-                        Search
-                    </button>
-
-                    <a href="@Url.Action("Index", "ItemMaster")"
-                       class="btn btn-secondary">
-                        Clear
-                    </a>
-                </div>
-
-            </form>
 
             <form method="post"
                   action="@Url.Action("Delete", "ItemMaster")"
@@ -64,14 +79,14 @@
                        name="searchText"
                        value="@Model.SearchText" />
 
-                <div class="mb-3">
+                <div class="item-master-actions">
                     <button type="submit"
-                            class="btn btn-danger">
+                            class="btn btn-outline-danger btn-sm">
                         Delete Selected
                     </button>
                 </div>
 
-                <table class="table table-bordered">
+                <table class="table item-master-table">
                     <thead>
                         <tr>
                             <th style="width: 48px;">
@@ -110,11 +125,8 @@
                 }
 
             </form>
-
         </div>
-
     </div>
-
 </div>
 
 <script>

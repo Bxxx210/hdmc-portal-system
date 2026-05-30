@@ -6,9 +6,6 @@ namespace HDMC.HardwareMinAlarm.Controllers
 {
     public class BaseController : Controller
     {
-        private const string DefaultPortalLoginUrl =
-            "https://localhost:44370/Login";
-
         private readonly SystemSettingService _systemSettingService;
         private readonly HardwareAccessService _hardwareAccessService;
 
@@ -107,10 +104,7 @@ namespace HDMC.HardwareMinAlarm.Controllers
 
         private string GetPortalLoginUrl()
         {
-            return _systemSettingService.GetValue(
-                SystemSettingService.PortalLoginUrlKey,
-                "PortalLoginUrl",
-                DefaultPortalLoginUrl);
+            return _systemSettingService.GetPortalLoginUrl();
         }
     }
 }

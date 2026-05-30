@@ -32,15 +32,54 @@ namespace HDMC.HardwareMinAlarm.Repositories
 
                 return connection.Query<ItemMasterModel>(
                         sql,
+                        CreateSearchParameters(company, searchText))
+                    .ToList();
+            }
+        }
+
+        public int Count(
+            string company,
+            string searchText)
+        {
+            using (var connection =
+                   DbConnectionFactory.CreateHardwareConnection())
+            {
+                const string sql = @"
+                    SELECT COUNT(1)
+                    FROM Item_master
+                    WHERE company = @Company
+                    AND
+                    (
+                        @SearchText IS NULL
+                        OR Part LIKE @SearchPattern
+                        OR Description LIKE @SearchPattern
+                    )";
+
+                return connection.ExecuteScalar<int>(
+                    sql,
+                    CreateSearchParameters(company, searchText));
+            }
+        }
+
+        public List<ItemMasterModel> GetAll(string company)
+        {
+            using (var connection =
+                   DbConnectionFactory.CreateHardwareConnection())
+            {
+                const string sql = @"
+                    SELECT
+                        company AS Company,
+                        Part,
+                        Description
+                    FROM Item_master
+                    WHERE company = @Company
+                    ORDER BY Part";
+
+                return connection.Query<ItemMasterModel>(
+                        sql,
                         new
                         {
-                            Company = company,
-                            SearchText = string.IsNullOrWhiteSpace(searchText)
-                                ? null
-                                : searchText,
-                            SearchPattern = "%"
-                                + (searchText ?? string.Empty).Trim()
-                                + "%"
+                            Company = company
                         })
                     .ToList();
             }
@@ -78,6 +117,22 @@ namespace HDMC.HardwareMinAlarm.Repositories
                         Parts = partList
                     });
             }
+        }
+
+        private object CreateSearchParameters(
+            string company,
+            string searchText)
+        {
+            return new
+            {
+                Company = company,
+                SearchText = string.IsNullOrWhiteSpace(searchText)
+                    ? null
+                    : searchText,
+                SearchPattern = "%"
+                    + (searchText ?? string.Empty).Trim()
+                    + "%"
+            };
         }
     }
 }

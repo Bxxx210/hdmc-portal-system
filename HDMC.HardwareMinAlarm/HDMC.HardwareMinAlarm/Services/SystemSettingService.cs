@@ -43,6 +43,14 @@ namespace HDMC.HardwareMinAlarm.Services
             return defaultValue;
         }
 
+        public string GetPortalLoginUrl()
+        {
+            return GetValue(
+                PortalLoginUrlKey,
+                "PortalLoginUrl",
+                "https://localhost:44370/Login");
+        }
+
         private string GetDatabaseValue(string settingKey)
         {
             try

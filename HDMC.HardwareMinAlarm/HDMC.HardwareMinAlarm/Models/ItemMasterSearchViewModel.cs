@@ -8,6 +8,8 @@ namespace HDMC.HardwareMinAlarm.Models
 
         public List<ItemMasterModel> Items { get; set; }
 
+        public int TotalCount { get; set; }
+
         public ItemMasterSearchViewModel()
         {
             Items = new List<ItemMasterModel>();

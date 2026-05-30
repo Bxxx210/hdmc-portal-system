@@ -7,6 +7,7 @@ namespace HDMC.HardwareMinAlarm.Controllers
     public class ItemMasterController : BaseController
     {
         private readonly ItemMasterService _itemMasterService;
+        private readonly ItemMasterWorkbookService _workbookService;
 
         protected override bool RequireElevatedAccess
         {
@@ -19,13 +20,18 @@ namespace HDMC.HardwareMinAlarm.Controllers
         }
 
         public ItemMasterController()
-            : this(new ItemMasterService())
+            : this(
+                new ItemMasterService(),
+                new ItemMasterWorkbookService())
         {
         }
 
-        public ItemMasterController(ItemMasterService itemMasterService)
+        public ItemMasterController(
+            ItemMasterService itemMasterService,
+            ItemMasterWorkbookService workbookService)
         {
             _itemMasterService = itemMasterService;
+            _workbookService = workbookService;
         }
 
         [HttpGet]
@@ -38,6 +44,19 @@ namespace HDMC.HardwareMinAlarm.Controllers
                 _itemMasterService.Search(user.Company, searchText);
 
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult Export()
+        {
+            var company =
+                SessionHelper.GetCurrentUser().Company;
+
+            return File(
+                _workbookService.CreateExport(
+                    _itemMasterService.GetAll(company)),
+                ItemMasterWorkbookService.ExcelContentType,
+                "item-master-" + company + ".xlsx");
         }
 
         [HttpPost]

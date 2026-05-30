@@ -178,6 +178,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemMasterController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\PortalController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\UploadHistoryController.cs" />
     <Compile Include="Global.asax.cs">
@@ -201,6 +202,7 @@
     <Compile Include="Repositories\UploadRepository.cs" />
     <Compile Include="Services\HardwareWorkflowService.cs" />
     <Compile Include="Services\HardwareAccessService.cs" />
+    <Compile Include="Services\ItemMasterWorkbookService.cs" />
     <Compile Include="Services\ItemMasterService.cs" />
     <Compile Include="Services\StatusMappingService.cs" />
     <Compile Include="Services\SystemSettingService.cs" />

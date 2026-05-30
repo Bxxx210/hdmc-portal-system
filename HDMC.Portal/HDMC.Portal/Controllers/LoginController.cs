@@ -24,6 +24,11 @@ namespace HDMC.Portal.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            if (_sessionService.IsLoggedIn(Session))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
