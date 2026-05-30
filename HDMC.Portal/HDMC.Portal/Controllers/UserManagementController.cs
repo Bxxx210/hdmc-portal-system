@@ -10,22 +10,45 @@ namespace HDMC.Portal.Controllers
     {
         private readonly UserManagementService
             _userManagementService;
+        private readonly SessionService _sessionService;
 
         protected override bool RequireAdminAccess
         {
             get { return true; }
         }
 
+        protected override bool RequiresAdminAccess(
+            ActionExecutingContext filterContext)
+        {
+            return !string.Equals(
+                filterContext.ActionDescriptor.ActionName,
+                "ResetPassword",
+                StringComparison.OrdinalIgnoreCase);
+        }
+
         public UserManagementController()
-            : this(new UserManagementService())
+            : this(
+                new UserManagementService(),
+                new SessionService())
         {
         }
 
         public UserManagementController(
             UserManagementService userManagementService)
+            : this(
+                userManagementService,
+                new SessionService())
+        {
+        }
+
+        public UserManagementController(
+            UserManagementService userManagementService,
+            SessionService sessionService)
         {
             _userManagementService =
                 userManagementService;
+            _sessionService =
+                sessionService;
         }
 
         [HttpGet]
@@ -147,7 +170,13 @@ namespace HDMC.Portal.Controllers
         [HttpGet]
         public ActionResult ResetPassword(string id)
         {
+            if (!CanResetPassword(id))
+            {
+                return RedirectToResetPasswordDenied();
+            }
+
             ViewBag.UserId = id;
+            PopulateResetPasswordView(id);
 
             return View();
         }
@@ -158,12 +187,18 @@ namespace HDMC.Portal.Controllers
             string userId,
             string password)
         {
+            if (!CanResetPassword(userId))
+            {
+                return RedirectToResetPasswordDenied();
+            }
+
             if (string.IsNullOrWhiteSpace(userId) ||
                 string.IsNullOrWhiteSpace(password))
             {
                 ViewBag.UserId = userId;
                 ViewBag.ErrorMessage =
                     "User ID and Password are required";
+                PopulateResetPasswordView(userId);
 
                 return View();
             }
@@ -178,6 +213,7 @@ namespace HDMC.Portal.Controllers
             {
                 ViewBag.UserId = userId;
                 ViewBag.ErrorMessage = ex.Message;
+                PopulateResetPasswordView(userId);
 
                 return View();
             }
@@ -185,7 +221,45 @@ namespace HDMC.Portal.Controllers
             TempData["SuccessMessage"] =
                 "Password reset success";
 
-            return RedirectToAction("Index");
+            return _sessionService.GetRoleId(Session) == 1
+                ? RedirectToAction("Index")
+                : RedirectToAction("Index", "Home");
+        }
+
+        private bool CanResetPassword(string userId)
+        {
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return false;
+            }
+
+            return _sessionService.GetRoleId(Session) == 1 ||
+                string.Equals(
+                    _sessionService.GetUserId(Session),
+                    userId,
+                    StringComparison.OrdinalIgnoreCase);
+        }
+
+        private ActionResult RedirectToResetPasswordDenied()
+        {
+            TempData["ErrorMessage"] =
+                "You can only reset your own password";
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        private void PopulateResetPasswordView(string userId)
+        {
+            ViewBag.IsSelfReset =
+                string.Equals(
+                    _sessionService.GetUserId(Session),
+                    userId,
+                    StringComparison.OrdinalIgnoreCase);
+
+            ViewBag.BackController =
+                _sessionService.GetRoleId(Session) == 1
+                    ? "UserManagement"
+                    : "Home";
         }
 
         private void PopulateUserOptions(UserManagementModel model)

@@ -14,6 +14,12 @@ namespace HDMC.Portal.Controllers
             get { return false; }
         }
 
+        protected virtual bool RequiresAdminAccess(
+            ActionExecutingContext filterContext)
+        {
+            return RequireAdminAccess;
+        }
+
         public BaseController()
             : this(new SessionService())
         {
@@ -37,7 +43,7 @@ namespace HDMC.Portal.Controllers
                 return;
             }
 
-            if (RequireAdminAccess &&
+            if (RequiresAdminAccess(filterContext) &&
                 _sessionService.GetRoleId(Session) != AdminRoleId)
             {
                 TempData["ErrorMessage"] =

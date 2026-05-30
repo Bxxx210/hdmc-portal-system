@@ -181,6 +181,10 @@
             {
                 <span class="nav-username">@Session["UserName"]</span>
             }
+            <a href="@Url.Action("ResetPassword", "UserManagement", new { id = Session["UserId"] })"
+               class="nav-link">
+                Change Password
+            </a>
             <form method="post" action="@Url.Action("Index", "Logout")" style="margin:0;">
                 @Html.AntiForgeryToken()
                 <button type="submit" class="btn-logout">

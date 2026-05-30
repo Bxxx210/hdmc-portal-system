@@ -115,9 +115,32 @@
         align-items: center;
         gap: 8px;
     }
+
+    .alert-success {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 13px;
+        color: #15803d;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 </style>
 
 <div class="home-wrapper">
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-success">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            @TempData["SuccessMessage"]
+        </div>
+    }
 
     @if (TempData["ErrorMessage"] != null)
     {
