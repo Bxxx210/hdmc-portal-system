@@ -32,6 +32,7 @@ namespace HDMC.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Select(string company)
         {
             var hardwareUrl =

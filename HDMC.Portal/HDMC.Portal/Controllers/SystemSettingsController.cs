@@ -34,6 +34,7 @@ namespace HDMC.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(SystemSettingModel model)
         {
             _systemSettingService.SaveSettings(model);

@@ -373,6 +373,7 @@
                                     Reset Password
                                 </a>
                                 <form method="post" action="@Url.Action("SetActive", "UserManagement")" style="margin:0;">
+                                    @Html.AntiForgeryToken()
                                     <input type="hidden" name="userId" value="@item.UserId" />
                                     <input type="hidden" name="isActive" value="@(!item.IsActive)" />
                                     <button type="submit" class="btn-action @(item.IsActive ? "toggle-active" : "toggle-inactive")">

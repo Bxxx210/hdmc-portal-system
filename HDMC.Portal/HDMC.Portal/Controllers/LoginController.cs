@@ -28,6 +28,7 @@ namespace HDMC.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(string userId, string password)
         {
             var user = _authService.Login(userId, password);

@@ -7,204 +7,6 @@
 }
 
 <style>
-    /* ใช้ CSS เดียวกับ Create.cshtml ทุกอย่าง */
-    .form-wrapper {
-        max-width: 640px;
-        margin: 40px auto;
-        padding: 0 24px;
-    }
-
-    .form-page-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 28px;
-    }
-
-    .btn-back {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        background: #fff;
-        border: 1px solid #e2e8f0;
-        border-radius: 7px;
-        padding: 6px 12px;
-        font-size: 13px;
-        font-weight: 500;
-        color: #64748b;
-        text-decoration: none;
-        transition: border-color 0.2s, color 0.2s, background 0.2s;
-        font-family: 'DM Sans', sans-serif;
-    }
-
-        .btn-back:hover {
-            border-color: #93c5fd;
-            color: #1a56db;
-            background: #eff6ff;
-            text-decoration: none;
-        }
-
-    .form-page-title {
-        font-family: 'Rajdhani', sans-serif;
-        font-size: 22px;
-        font-weight: 700;
-        color: #1e293b;
-    }
-
-    .form-card {
-        background: #fff;
-        border: 1px solid #e2e8f0;
-        border-radius: 14px;
-        overflow: hidden;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-    }
-
-    .form-card-head {
-        padding: 22px 28px;
-        border-bottom: 1px solid #f1f5f9;
-    }
-
-    .form-card-eyebrow {
-        font-size: 11px;
-        letter-spacing: 2.5px;
-        text-transform: uppercase;
-        color: #1a56db;
-        font-weight: 500;
-        margin-bottom: 4px;
-    }
-
-    .form-card-title {
-        font-family: 'Rajdhani', sans-serif;
-        font-size: 20px;
-        font-weight: 700;
-        color: #1e293b;
-    }
-
-    .form-card-body {
-        padding: 28px;
-    }
-
-    .form-field {
-        margin-bottom: 22px;
-    }
-
-    .form-label {
-        display: block;
-        font-size: 12px;
-        letter-spacing: 1.2px;
-        text-transform: uppercase;
-        color: #64748b;
-        font-weight: 500;
-        margin-bottom: 8px;
-    }
-
-    .form-input, .form-select {
-        width: 100%;
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 11px 14px;
-        font-size: 14px;
-        color: #1e293b;
-        font-family: 'DM Sans', sans-serif;
-        transition: border-color 0.2s, box-shadow 0.2s;
-        outline: none;
-        box-sizing: border-box;
-    }
-
-        .form-input:focus, .form-select:focus {
-            border-color: #1a56db;
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
-        }
-
-        .form-input:disabled {
-            background: #f1f5f9;
-            color: #94a3b8;
-            cursor: not-allowed;
-        }
-
-    .check-group {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding: 14px;
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-    }
-
-    .check-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 14px;
-        color: #334155;
-        cursor: pointer;
-    }
-
-        .check-item input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            accent-color: #1a56db;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .check-item.all-companies {
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e2e8f0;
-            font-weight: 500;
-            color: #1e293b;
-        }
-
-    .form-card-foot {
-        padding: 18px 28px;
-        border-top: 1px solid #f1f5f9;
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .btn-submit {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        background: #1a56db;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 20px;
-        font-family: 'Rajdhani', sans-serif;
-        font-size: 15px;
-        font-weight: 700;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        color: #fff;
-        cursor: pointer;
-        transition: background 0.2s, transform 0.1s;
-        box-shadow: 0 2px 8px rgba(26,86,219,0.2);
-    }
-
-        .btn-submit:hover {
-            background: #1646b8;
-        }
-
-        .btn-submit:active {
-            transform: scale(0.98);
-        }
-
-    .alert-error {
-        background: #fef2f2;
-        border: 1px solid #fecaca;
-        border-radius: 8px;
-        padding: 10px 14px;
-        font-size: 13px;
-        color: #b91c1c;
-        margin-bottom: 22px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
     .toggle-row {
         display: flex;
         align-items: center;
@@ -227,11 +29,11 @@
         height: 24px;
     }
 
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
 
     .toggle-slider {
         position: absolute;
@@ -242,25 +44,25 @@
         transition: background 0.2s;
     }
 
-        .toggle-slider:before {
-            content: "";
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            left: 3px;
-            top: 3px;
-            background: #fff;
-            border-radius: 50%;
-            transition: transform 0.2s;
-        }
+    .toggle-slider:before {
+        content: "";
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        left: 3px;
+        top: 3px;
+        background: #fff;
+        border-radius: 50%;
+        transition: transform 0.2s;
+    }
 
     .toggle-switch input:checked + .toggle-slider {
         background: #1a56db;
     }
 
-        .toggle-switch input:checked + .toggle-slider:before {
-            transform: translateX(20px);
-        }
+    .toggle-switch input:checked + .toggle-slider:before {
+        transform: translateX(20px);
+    }
 </style>
 
 <div class="form-wrapper">
@@ -278,7 +80,6 @@
             <div class="form-card-title">@Model.UserId</div>
         </div>
         <div class="form-card-body">
-
             @if (ViewBag.ErrorMessage != null)
             {
                 <div class="alert-error">
@@ -288,6 +89,7 @@
             }
 
             <form method="post" id="editForm">
+                @Html.AntiForgeryToken()
                 <input type="hidden" name="UserId" value="@Model.UserId" />
                 <div class="form-field">
                     <label class="form-label">User ID</label>
@@ -342,7 +144,6 @@
                     </div>
                 </div>
             </form>
-
         </div>
         <div class="form-card-foot">
             <button type="submit" form="editForm" class="btn-submit">
@@ -353,18 +154,4 @@
     </div>
 </div>
 
-<script>
-    (function () {
-        var allCompanies = document.getElementById("IsAllCompanies");
-        var companyOptions = document.querySelectorAll(".company-option");
-        function syncCompanyOptions() {
-            for (var i = 0; i < companyOptions.length; i++) {
-                companyOptions[i].disabled = allCompanies.checked;
-            }
-        }
-        if (allCompanies) {
-            allCompanies.addEventListener("change", syncCompanyOptions);
-            syncCompanyOptions();
-        }
-    })();
-</script>
+<script src="@Url.Content("~/Scripts/user-company-selection.js")"></script>

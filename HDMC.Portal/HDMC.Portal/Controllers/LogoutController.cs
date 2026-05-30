@@ -18,6 +18,7 @@ namespace HDMC.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index()
         {
             _sessionService.ClearSession(Session);

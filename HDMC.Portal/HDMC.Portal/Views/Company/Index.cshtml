@@ -177,8 +177,6 @@
     }
 </style>
 
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-
 <div class="page-wrapper">
     <div class="page-brand">
         <div class="page-brand-mark">HD</div>
@@ -201,6 +199,7 @@
                     <form method="post"
                           action="@Url.Action("Select", "Company")"
                           class="company-form">
+                        @Html.AntiForgeryToken()
                         <input type="hidden" name="company" value="@item.Company" />
                         <button type="submit" class="company-btn">
                             <div class="company-icon">

@@ -48,6 +48,7 @@ namespace HDMC.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(
             UserManagementModel model,
             string password,
@@ -101,6 +102,7 @@ namespace HDMC.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(UserManagementModel model)
         {
             try
@@ -129,6 +131,7 @@ namespace HDMC.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SetActive(string userId, bool isActive)
         {
             _userManagementService.SetActive(userId, isActive);
@@ -150,6 +153,7 @@ namespace HDMC.Portal.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ResetPassword(
             string userId,
             string password)
