@@ -132,7 +132,7 @@ namespace HDMC.HardwareMinAlarm.Repositories
                                 SELECT TOP 1
                                     id,
                                     part_status
-                                FROM Input_hardware
+                                FROM Input_hardware WITH (UPDLOCK, HOLDLOCK)
                                 WHERE part_number = @PartNumber
                                 AND part_company = @Company
                                 ORDER BY [date] DESC";
