@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -33,41 +35,65 @@ namespace HDMC.HardwareMinAlarm.Services
 
             try
             {
+                var rows =
+                    new List<ItemMasterRow>();
+                var keys =
+                    new HashSet<string>(
+                        StringComparer.OrdinalIgnoreCase);
+
+                if (IsCsvFile(file.FileName))
+                {
+                    ProcessCsvFile(
+                        file,
+                        result,
+                        allowedCompany,
+                        rows,
+                        keys);
+                }
+                else
+                {
+                    ProcessExcelFile(
+                        file,
+                        result,
+                        allowedCompany,
+                        rows,
+                        keys);
+                }
+
                 using (var connection =
                        DbConnectionFactory.CreateHardwareConnection())
                 {
                     connection.Open();
 
-                    if (IsCsvFile(file.FileName))
+                    using (var transaction =
+                           connection.BeginTransaction())
                     {
-                        ProcessCsvFile(
-                            file,
+                        BulkUpsertItemMaster(
                             connection,
-                            result,
-                            allowedCompany);
-                    }
-                    else
-                    {
-                        ProcessExcelFile(
-                            file,
-                            connection,
-                            result,
-                            allowedCompany);
-                    }
+                            transaction,
+                            rows);
 
-                    SaveImportLog(
-                        connection,
-                        result,
-                        string.IsNullOrWhiteSpace(uploadedBy)
-                            ? "SYSTEM"
-                            : uploadedBy,
-                        allowedCompany);
+                        result.SuccessRows =
+                            rows.Count;
+
+                        SaveImportLog(
+                            connection,
+                            transaction,
+                            result,
+                            string.IsNullOrWhiteSpace(uploadedBy)
+                                ? "SYSTEM"
+                                : uploadedBy,
+                            allowedCompany);
+
+                        transaction.Commit();
+                    }
                 }
 
                 return result;
             }
             catch (Exception ex)
             {
+                result.SuccessRows = 0;
                 result.ErrorMessage =
                     ex.Message;
 
@@ -77,9 +103,10 @@ namespace HDMC.HardwareMinAlarm.Services
 
         private void ProcessExcelFile(
             HttpPostedFileBase file,
-            IDbConnection connection,
             UploadResultModel result,
-            string allowedCompany)
+            string allowedCompany,
+            List<ItemMasterRow> items,
+            HashSet<string> keys)
         {
             using (var workbook = new XLWorkbook(file.InputStream))
             {
@@ -91,7 +118,6 @@ namespace HDMC.HardwareMinAlarm.Services
                 foreach (var row in rows)
                 {
                     ProcessItemMasterRow(
-                        connection,
                         result,
                         new ItemMasterRow
                         {
@@ -99,16 +125,19 @@ namespace HDMC.HardwareMinAlarm.Services
                             Part = row.Cell(2).GetString().Trim(),
                             Description = row.Cell(3).GetString().Trim()
                         },
-                        allowedCompany);
+                        allowedCompany,
+                        items,
+                        keys);
                 }
             }
         }
 
         private void ProcessCsvFile(
             HttpPostedFileBase file,
-            IDbConnection connection,
             UploadResultModel result,
-            string allowedCompany)
+            string allowedCompany,
+            List<ItemMasterRow> items,
+            HashSet<string> keys)
         {
             using (var reader =
                    new StreamReader(file.InputStream))
@@ -124,7 +153,6 @@ namespace HDMC.HardwareMinAlarm.Services
                         (line ?? string.Empty).Split(',');
 
                     ProcessItemMasterRow(
-                        connection,
                         result,
                         new ItemMasterRow
                         {
@@ -132,16 +160,19 @@ namespace HDMC.HardwareMinAlarm.Services
                             Part = GetCsvColumn(columns, 1),
                             Description = GetCsvColumn(columns, 2)
                         },
-                        allowedCompany);
+                        allowedCompany,
+                        items,
+                        keys);
                 }
             }
         }
 
         private void ProcessItemMasterRow(
-            IDbConnection connection,
             UploadResultModel result,
             ItemMasterRow row,
-            string allowedCompany)
+            string allowedCompany,
+            List<ItemMasterRow> items,
+            HashSet<string> keys)
         {
             result.TotalRows++;
 
@@ -170,24 +201,66 @@ namespace HDMC.HardwareMinAlarm.Services
                 return;
             }
 
-            UpsertItemMaster(connection, row);
+            var key =
+                row.Company + "\0" + row.Part;
 
-            result.SuccessRows++;
+            if (!keys.Add(key))
+            {
+                result.Errors.Add(
+                    $"Row {result.TotalRows}: Duplicate Part [{row.Part}] in upload file");
+
+                result.FailedRows++;
+
+                return;
+            }
+
+            items.Add(row);
         }
 
-        private void UpsertItemMaster(
-            IDbConnection connection,
-            ItemMasterRow row)
+        private void BulkUpsertItemMaster(
+            SqlConnection connection,
+            SqlTransaction transaction,
+            List<ItemMasterRow> items)
         {
-            const string sql = @"
-                MERGE Item_master AS target
-                USING
-                (
-                    SELECT
-                        @Company AS company,
-                        @Part AS Part,
-                        @Description AS Description
-                ) AS source
+            if (!items.Any())
+            {
+                return;
+            }
+
+            const string createStagingSql = @"
+                SELECT TOP 0
+                    company,
+                    Part,
+                    Description
+                INTO #ItemMasterUpload
+                FROM Item_master";
+
+            connection.Execute(
+                createStagingSql,
+                transaction: transaction);
+
+            var table =
+                CreateItemMasterTable(items);
+
+            using (var bulkCopy =
+                   new SqlBulkCopy(
+                       connection,
+                       SqlBulkCopyOptions.Default,
+                       transaction))
+            {
+                bulkCopy.DestinationTableName =
+                    "#ItemMasterUpload";
+                bulkCopy.ColumnMappings.Add("company", "company");
+                bulkCopy.ColumnMappings.Add("Part", "Part");
+                bulkCopy.ColumnMappings.Add(
+                    "Description",
+                    "Description");
+                bulkCopy.WriteToServer(table);
+            }
+
+            const string mergeSql = @"
+                MERGE Item_master WITH (HOLDLOCK) AS target
+                USING #ItemMasterUpload AS source
                 ON target.company = source.company
                 AND target.Part = source.Part
                 WHEN MATCHED THEN
@@ -208,17 +281,34 @@ namespace HDMC.HardwareMinAlarm.Services
                     );";
 
             connection.Execute(
-                sql,
-                new
-                {
-                    Company = row.Company,
-                    Part = row.Part,
-                    Description = row.Description
-                });
+                mergeSql,
+                transaction: transaction);
+        }
+
+        private DataTable CreateItemMasterTable(
+            IEnumerable<ItemMasterRow> items)
+        {
+            var table =
+                new DataTable();
+
+            table.Columns.Add("company", typeof(string));
+            table.Columns.Add("Part", typeof(string));
+            table.Columns.Add("Description", typeof(string));
+
+            foreach (var item in items)
+            {
+                table.Rows.Add(
+                    item.Company,
+                    item.Part,
+                    item.Description);
+            }
+
+            return table;
         }
 
         private void SaveImportLog(
             IDbConnection connection,
+            IDbTransaction transaction,
             UploadResultModel result,
             string uploadedBy,
             string company)
@@ -253,7 +343,8 @@ namespace HDMC.HardwareMinAlarm.Services
                     SuccessRows = result.SuccessRows,
                     FailedRows = result.FailedRows,
                     UploadedBy = uploadedBy
-                });
+                },
+                transaction);
         }
 
         private bool IsCsvFile(string fileName)

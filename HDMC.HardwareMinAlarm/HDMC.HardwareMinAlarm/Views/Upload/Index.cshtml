@@ -23,6 +23,7 @@
             }
 
             <form method="post"
+                  id="uploadForm"
                   enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
 
@@ -31,7 +32,8 @@
                     <input type="file"
                            name="file"
                            class="form-control"
-                           accept=".xlsx" />
+                           accept=".xlsx"
+                           required />
 
                     <div class="form-text">
                         Use the Excel template to keep columns and values consistent.
@@ -40,6 +42,7 @@
                 </div>
 
                 <button type="submit"
+                        id="uploadButton"
                         class="btn btn-primary">
 
                     Upload
@@ -100,3 +103,75 @@
     </div>
 
 </div>
+
+<div id="uploadOverlay" class="upload-overlay" aria-live="polite" aria-hidden="true">
+    <div class="upload-progress-card">
+        <div class="spinner-border text-primary" role="status"></div>
+        <div class="upload-progress-title">Uploading Item Master</div>
+        <div class="upload-progress-text">
+            Validating Excel rows and updating the database. Please keep this page open.
+        </div>
+    </div>
+</div>
+
+<style>
+    .upload-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(15, 23, 42, 0.42);
+    }
+
+    .upload-overlay.is-visible {
+        display: flex;
+    }
+
+    .upload-progress-card {
+        width: min(420px, 100%);
+        padding: 28px;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.22);
+        text-align: center;
+    }
+
+    .upload-progress-title {
+        margin-top: 14px;
+        color: #1e293b;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .upload-progress-text {
+        margin-top: 6px;
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+</style>
+
+<script>
+    (function () {
+        var form =
+            document.getElementById("uploadForm");
+        var button =
+            document.getElementById("uploadButton");
+        var overlay =
+            document.getElementById("uploadOverlay");
+
+        if (!form || !button || !overlay) {
+            return;
+        }
+
+        form.addEventListener("submit", function () {
+            button.disabled = true;
+            button.textContent = "Uploading...";
+            overlay.classList.add("is-visible");
+            overlay.setAttribute("aria-hidden", "false");
+        });
+    })();
+</script>
