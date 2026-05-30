@@ -1,0 +1,49 @@
+﻿@model List<HDMC.HardwareMinAlarm.Models.CompanyAccessModel>
+@{
+    ViewBag.Title = "Hardware Menu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="menu-wrapper">
+    <div class="menu-eyebrow">Hardware Min Alarm</div>
+    <h1 class="menu-title">Select Function</h1>
+    <div class="menu-hint">Choose a company before opening a company-specific function.</div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <div class="menu-grid">
+        @foreach (var item in new[]
+        {
+            new { Destination = "Scan", Title = "Scan Part", Description = "Search a part and update its min alarm status." },
+            new { Destination = "Upload", Title = "Upload Item Master", Description = "Import item master rows for the selected company." },
+            new { Destination = "ItemMaster", Title = "Item Master", Description = "Search and manage item master rows for the selected company." }
+        })
+        {
+            <div class="menu-card">
+                <div class="menu-card-title">@item.Title</div>
+                <div class="menu-card-desc">@item.Description</div>
+                <form method="post" action="@Url.Action("SelectCompany", "Menu")">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="destination" value="@item.Destination" />
+                    <select name="company" class="menu-select" required>
+                        <option value="">Select Company</option>
+                        @foreach (var company in Model)
+                        {
+                            <option value="@company.Company">@company.Company</option>
+                        }
+                    </select>
+                    <button type="submit" class="menu-button">Open</button>
+                </form>
+            </div>
+        }
+
+        <div class="menu-card">
+            <div class="menu-card-title">Upload History</div>
+            <div class="menu-card-desc">Review upload activity across the companies assigned to your account.</div>
+            <a href="@Url.Action("Index", "UploadHistory")" class="menu-button">Open</a>
+        </div>
+    </div>
+</div>

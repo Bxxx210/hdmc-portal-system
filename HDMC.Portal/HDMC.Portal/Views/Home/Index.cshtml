@@ -167,7 +167,7 @@
 
         @if (ViewBag.CanAccessHardware == true)
         {
-            <a href="@Url.Action("Index", "Company")" class="module-card">
+            <a href="@Url.Action(ViewBag.HasHardwareMenu == true ? "EnterHardware" : "Index", "Company")" class="module-card">
                 <div class="module-icon blue">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a56db" stroke-width="2">
                         <rect x="2" y="3" width="20" height="14" rx="2" />

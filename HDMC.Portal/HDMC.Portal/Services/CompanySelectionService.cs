@@ -60,16 +60,31 @@ namespace HDMC.Portal.Services
                 .Any();
         }
 
-        public string SelectCompanyAndBuildHardwareUrl(
-            HttpSessionStateBase session,
-            string company)
+        public bool IsElevatedRole(HttpSessionStateBase session)
         {
-            _sessionService.SetCompany(session, company);
+            var roleId =
+                _sessionService.GetRoleId(session);
+
+            return roleId == 1 ||
+                roleId == 2;
+        }
+
+        public string BuildHardwareUrl(
+            HttpSessionStateBase session,
+            string company = null)
+        {
+            if (!string.IsNullOrWhiteSpace(company))
+            {
+                _sessionService.SetCompany(session, company);
+            }
 
             var queryString = HttpUtility.ParseQueryString(string.Empty);
             queryString["userId"] = _sessionService.GetUserId(session);
-            queryString["userName"] = _sessionService.GetUserName(session);
-            queryString["company"] = company;
+
+            if (!string.IsNullOrWhiteSpace(company))
+            {
+                queryString["company"] = company;
+            }
 
             return GetHardwareEntryUrl() + "?" + queryString;
         }

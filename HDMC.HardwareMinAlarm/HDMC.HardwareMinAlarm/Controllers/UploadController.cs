@@ -10,6 +10,16 @@ namespace HDMC.HardwareMinAlarm.Controllers
     {
         private readonly UploadService _uploadService;
 
+        protected override bool RequireElevatedAccess
+        {
+            get { return true; }
+        }
+
+        protected override bool RequireSelectedCompany
+        {
+            get { return true; }
+        }
+
         public UploadController()
         {
             _uploadService = new UploadService();
@@ -22,6 +32,7 @@ namespace HDMC.HardwareMinAlarm.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(HttpPostedFileBase file)
         {
             if (file == null ||

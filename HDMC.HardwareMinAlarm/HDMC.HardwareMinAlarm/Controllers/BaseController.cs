@@ -10,15 +10,31 @@ namespace HDMC.HardwareMinAlarm.Controllers
             "https://localhost:44370/Login";
 
         private readonly SystemSettingService _systemSettingService;
+        private readonly HardwareAccessService _hardwareAccessService;
+
+        protected virtual bool RequireElevatedAccess
+        {
+            get { return false; }
+        }
+
+        protected virtual bool RequireSelectedCompany
+        {
+            get { return false; }
+        }
 
         public BaseController()
-            : this(new SystemSettingService())
+            : this(
+                new SystemSettingService(),
+                new HardwareAccessService())
         {
         }
 
-        public BaseController(SystemSettingService systemSettingService)
+        public BaseController(
+            SystemSettingService systemSettingService,
+            HardwareAccessService hardwareAccessService)
         {
             _systemSettingService = systemSettingService;
+            _hardwareAccessService = hardwareAccessService;
         }
 
         protected override void OnActionExecuting(
@@ -46,6 +62,38 @@ namespace HDMC.HardwareMinAlarm.Controllers
             {
                 filterContext.Result =
                     Redirect(GetPortalLoginUrl());
+
+                base.OnActionExecuting(filterContext);
+
+                return;
+            }
+
+            var user =
+                SessionHelper.GetCurrentUser();
+
+            if (RequireElevatedAccess &&
+                !_hardwareAccessService.IsElevatedRole(user.RoleId))
+            {
+                filterContext.Result =
+                    RedirectToAction("Index", "Home");
+
+                base.OnActionExecuting(filterContext);
+
+                return;
+            }
+
+            if (RequireSelectedCompany &&
+                !_hardwareAccessService.CanCurrentUserAccessCompany(
+                    user.Company))
+            {
+                filterContext.Result =
+                    _hardwareAccessService.IsElevatedRole(user.RoleId)
+                        ? RedirectToAction("Index", "Menu")
+                        : Redirect(GetPortalLoginUrl());
+
+                base.OnActionExecuting(filterContext);
+
+                return;
             }
 
             base.OnActionExecuting(filterContext);

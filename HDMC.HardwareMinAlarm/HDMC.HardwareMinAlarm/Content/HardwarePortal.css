@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+body {
+    margin: 0;
+    background: #f0f2f5;
+    color: #1e293b;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.hardware-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 56px;
+    padding: 0 28px;
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.hardware-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1e293b;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.hardware-brand:hover {
+    color: #1e293b;
+}
+
+.hardware-brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
+    background: #1a56db;
+    color: #fff;
+    font-size: 13px;
+}
+
+.hardware-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.hardware-nav-link {
+    padding: 6px 12px;
+    border-radius: 7px;
+    color: #64748b;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.hardware-nav-link:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.hardware-context {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.menu-wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+.menu-eyebrow {
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+}
+
+.menu-title {
+    margin: 4px 0 8px;
+    color: #1e293b;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.menu-hint {
+    margin-bottom: 24px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+}
+
+.menu-card {
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.menu-card-title {
+    color: #1e293b;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.menu-card-desc {
+    min-height: 42px;
+    margin: 4px 0 16px;
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.menu-select {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #334155;
+}
+
+.menu-button {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 8px;
+    background: #1a56db;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.menu-button:hover {
+    background: #1646b8;
+    color: #fff;
+}

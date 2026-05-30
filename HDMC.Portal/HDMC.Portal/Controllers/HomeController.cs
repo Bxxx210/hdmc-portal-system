@@ -32,6 +32,10 @@ namespace HDMC.Portal.Controllers
             ViewBag.IsAdmin =
                 _sessionService.GetRoleId(Session) == 1;
 
+            ViewBag.HasHardwareMenu =
+                _sessionService.GetRoleId(Session) == 1 ||
+                _sessionService.GetRoleId(Session) == 2;
+
             ViewBag.CanAccessHardware =
                 _companySelectionService.HasAccessToApp(
                     Session,

@@ -1,74 +1,66 @@
 ﻿@model List<HDMC.HardwareMinAlarm.Models.UploadHistoryModel>
-
 @{
     ViewBag.Title = "Upload History";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container mt-4">
-
     <div class="card shadow">
-
         <div class="card-header">
             <h4>Upload History</h4>
         </div>
-
         <div class="card-body">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+
+            <form method="get" class="row g-2 mb-3">
+                <div class="col-md-8">
+                    <select name="company" class="form-select">
+                        <option value="">All Assigned Companies</option>
+                        @foreach (var company in (System.Collections.Generic.IEnumerable<HDMC.HardwareMinAlarm.Models.CompanyAccessModel>)ViewBag.Companies)
+                        {
+                            <option value="@company.Company"
+                                    @(ViewBag.SelectedCompany == company.Company ? "selected" : string.Empty)>
+                                @company.Company
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a href="@Url.Action("Index", "UploadHistory")" class="btn btn-secondary">Clear</a>
+                </div>
+            </form>
 
             <table class="table table-bordered">
-
                 <thead>
-
                     <tr>
                         <th>Date</th>
+                        <th>Company</th>
                         <th>File</th>
                         <th>Total</th>
                         <th>Success</th>
                         <th>Failed</th>
                         <th>User</th>
                     </tr>
-
                 </thead>
-
                 <tbody>
-
                     @foreach (var item in Model)
                     {
                         <tr>
-
-                            <td>
-                                @item.UploadedDate
-                            </td>
-
-                            <td>
-                                @item.FileName
-                            </td>
-
-                            <td>
-                                @item.TotalRows
-                            </td>
-
-                            <td>
-                                @item.SuccessRows
-                            </td>
-
-                            <td>
-                                @item.FailedRows
-                            </td>
-
-                            <td>
-                                @item.UploadedBy
-                            </td>
-
+                            <td>@item.UploadedDate</td>
+                            <td>@item.Company</td>
+                            <td>@item.FileName</td>
+                            <td>@item.TotalRows</td>
+                            <td>@item.SuccessRows</td>
+                            <td>@item.FailedRows</td>
+                            <td>@item.UploadedBy</td>
                         </tr>
                     }
-
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
-
 </div>

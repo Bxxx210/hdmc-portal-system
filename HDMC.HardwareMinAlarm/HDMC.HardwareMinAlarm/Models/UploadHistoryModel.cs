@@ -8,6 +8,8 @@ namespace HDMC.HardwareMinAlarm.Models
 
         public string FileName { get; set; }
 
+        public string Company { get; set; }
+
         public int TotalRows { get; set; }
 
         public int SuccessRows { get; set; }

@@ -64,7 +64,8 @@ namespace HDMC.HardwareMinAlarm.Services
                         result,
                         string.IsNullOrWhiteSpace(uploadedBy)
                             ? "SYSTEM"
-                            : uploadedBy);
+                            : uploadedBy,
+                        allowedCompany);
                 }
 
                 return result;
@@ -296,12 +297,14 @@ namespace HDMC.HardwareMinAlarm.Services
         private void SaveImportLog(
             IDbConnection connection,
             UploadResultModel result,
-            string uploadedBy)
+            string uploadedBy,
+            string company)
         {
             const string sql = @"
                 INSERT INTO Item_Master_Import_Log
                 (
                     file_name,
+                    company,
                     total_rows,
                     success_rows,
                     failed_rows,
@@ -310,6 +313,7 @@ namespace HDMC.HardwareMinAlarm.Services
                 VALUES
                 (
                     @FileName,
+                    @Company,
                     @TotalRows,
                     @SuccessRows,
                     @FailedRows,
@@ -321,6 +325,7 @@ namespace HDMC.HardwareMinAlarm.Services
                 new
                 {
                     FileName = result.FileName,
+                    Company = company,
                     TotalRows = result.TotalRows,
                     SuccessRows = result.SuccessRows,
                     FailedRows = result.FailedRows,

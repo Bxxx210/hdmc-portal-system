@@ -31,12 +31,24 @@ namespace HDMC.Portal.Controllers
             return View(companies);
         }
 
+        [HttpGet]
+        public ActionResult EnterHardware()
+        {
+            if (!_companySelectionService.IsElevatedRole(Session))
+            {
+                return RedirectToAction("Index");
+            }
+
+            return Redirect(
+                _companySelectionService.BuildHardwareUrl(Session));
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Select(string company)
         {
             var hardwareUrl =
-                _companySelectionService.SelectCompanyAndBuildHardwareUrl(
+                _companySelectionService.BuildHardwareUrl(
                     Session,
                     company);
 

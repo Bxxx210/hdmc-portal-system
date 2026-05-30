@@ -8,6 +8,16 @@ namespace HDMC.HardwareMinAlarm.Controllers
     {
         private readonly ItemMasterService _itemMasterService;
 
+        protected override bool RequireElevatedAccess
+        {
+            get { return true; }
+        }
+
+        protected override bool RequireSelectedCompany
+        {
+            get { return true; }
+        }
+
         public ItemMasterController()
             : this(new ItemMasterService())
         {
@@ -31,6 +41,7 @@ namespace HDMC.HardwareMinAlarm.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(
             string searchText,
             string[] selectedParts)

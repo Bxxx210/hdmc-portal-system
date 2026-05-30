@@ -52,6 +52,7 @@
             }
 
             <form method="post">
+                @Html.AntiForgeryToken()
 
                 <div class="mb-3">
 
@@ -112,6 +113,7 @@
                       action="@Url.Action(
                           "SaveStatus",
                           "Home")">
+                    @Html.AntiForgeryToken()
 
                     <input type="hidden"
                            name="PartNumber"

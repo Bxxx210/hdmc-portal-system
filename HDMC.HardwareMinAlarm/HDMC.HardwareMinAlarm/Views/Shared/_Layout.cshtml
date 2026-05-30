@@ -3,50 +3,38 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - HDMC Hardware</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>
-                        @Html.ActionLink(
-                           "Home", 
-                           "Index", 
-                           "Home", 
-                           new { area = "" }, 
-                           new { @class = "nav-link" })
-                    </li>
-                    <li>
-                        @Html.ActionLink(
-                            "Upload Item Master",
-                            "Index",
-                            "Upload")
-                    </li>
-                    <li>
-                        @Html.ActionLink(
-                            "Item Master",
-                            "Index",
-                            "ItemMaster")
-                    </li>
-                </ul>
-            </div>
+    <nav class="hardware-nav">
+        <a href="@Url.Action("Index", "Home")" class="hardware-brand">
+            <span class="hardware-brand-mark">HD</span>
+            <span>HDMC Hardware</span>
+        </a>
+
+        <span class="hardware-context">
+            @Session["UserName"]
+            @if (Session["Company"] != null)
+            {
+                <text> / @Session["Company"]</text>
+            }
+        </span>
+
+        <div class="hardware-nav-links">
+            @if (Session["RoleId"] != null &&
+                 (Session["RoleId"].ToString() == "1" ||
+                  Session["RoleId"].ToString() == "2"))
+            {
+                <a href="@Url.Action("Index", "Menu")" class="hardware-nav-link">Menu</a>
+                <a href="@Url.Action("Index", "UploadHistory")" class="hardware-nav-link">Upload History</a>
+            }
         </div>
     </nav>
+
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

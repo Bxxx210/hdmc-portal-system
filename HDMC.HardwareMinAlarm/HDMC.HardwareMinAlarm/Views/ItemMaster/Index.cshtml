@@ -58,6 +58,7 @@
             <form method="post"
                   action="@Url.Action("Delete", "ItemMaster")"
                   onsubmit="return confirm('Delete selected part(s)?');">
+                @Html.AntiForgeryToken()
 
                 <input type="hidden"
                        name="searchText"

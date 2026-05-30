@@ -7,15 +7,33 @@ namespace HDMC.HardwareMinAlarm.Controllers
     public class HomeController : BaseController
     {
         private readonly HardwareWorkflowService _hardwareWorkflowService;
+        private readonly HardwareAccessService _hardwareAccessService;
+
+        protected override bool RequireSelectedCompany
+        {
+            get { return true; }
+        }
 
         public HomeController()
-            : this(new HardwareWorkflowService())
+            : this(
+                new HardwareWorkflowService(),
+                new HardwareAccessService())
         {
         }
 
         public HomeController(HardwareWorkflowService hardwareWorkflowService)
+            : this(
+                hardwareWorkflowService,
+                new HardwareAccessService())
+        {
+        }
+
+        public HomeController(
+            HardwareWorkflowService hardwareWorkflowService,
+            HardwareAccessService hardwareAccessService)
         {
             _hardwareWorkflowService = hardwareWorkflowService;
+            _hardwareAccessService = hardwareAccessService;
         }
 
         [HttpGet]
@@ -27,17 +45,44 @@ namespace HDMC.HardwareMinAlarm.Controllers
         [HttpGet]
         public ActionResult Entry(
             string userId,
-            string userName,
             string company)
         {
-            Session["UserId"] = userId;
-            Session["UserName"] = userName;
+            Session.Clear();
+
+            var access =
+                _hardwareAccessService.GetAccess(userId);
+
+            if (access == null ||
+                access.Companies.Count == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            Session["UserId"] = access.UserId;
+            Session["UserName"] = access.UserName;
+            Session["RoleId"] = access.RoleId;
+
+            if (_hardwareAccessService.IsElevatedRole(access.RoleId))
+            {
+                Session["Company"] = null;
+
+                return RedirectToAction("Index", "Menu");
+            }
+
+            if (!_hardwareAccessService.CanAccessCompany(access, company))
+            {
+                Session.Clear();
+
+                return RedirectToAction("Index", "Home");
+            }
+
             Session["Company"] = company;
 
             return RedirectToAction("Index");
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(string partNumber)
         {
             var user =
@@ -65,6 +110,7 @@ namespace HDMC.HardwareMinAlarm.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SaveStatus(string partNumber, string statusCode)
         {
             if (!_hardwareWorkflowService.IsValidStatus(statusCode))
