@@ -86,10 +86,16 @@ namespace HDMC.HardwareMinAlarm.Controllers
                 !_hardwareAccessService.CanCurrentUserAccessCompany(
                     user.Company))
             {
-                filterContext.Result =
-                    _hardwareAccessService.IsElevatedRole(user.RoleId)
-                        ? RedirectToAction("Index", "Menu")
-                        : Redirect(GetPortalLoginUrl());
+                if (_hardwareAccessService.IsElevatedRole(user.RoleId))
+                {
+                    filterContext.Result =
+                        RedirectToAction("Index", "Menu");
+                }
+                else
+                {
+                    filterContext.Result =
+                        Redirect(GetPortalLoginUrl());
+                }
 
                 base.OnActionExecuting(filterContext);
 
