@@ -62,9 +62,9 @@
                 <div class="form-field">
                     <label class="form-label">Company Access</label>
                     <div class="check-group">
-                        <input type="hidden" name="IsAllCompanies" value="false" />
                         <label class="check-item all-companies">
                             <input type="checkbox" name="IsAllCompanies" value="true" id="IsAllCompanies" @(ViewBag.IsAllCompanies == true ? "checked" : string.Empty) />
+                            <input type="hidden" name="IsAllCompanies" value="false" />
                             All Companies
                         </label>
                         @foreach (var company in (IEnumerable<SelectListItem>)ViewBag.Companies)
