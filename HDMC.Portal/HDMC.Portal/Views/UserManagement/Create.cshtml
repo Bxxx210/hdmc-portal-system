@@ -1,180 +1,310 @@
 ﻿@using System.Collections.Generic
 @using System.Web.Mvc
 @model HDMC.Portal.Models.UserManagementModel
-
 @{
     ViewBag.Title = "Create User";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
+<style>
+    .form-wrapper {
+        max-width: 640px;
+        margin: 40px auto;
+        padding: 0 24px;
+    }
 
-    <div class="card shadow">
+    .form-page-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 28px;
+    }
 
-        <div class="card-header">
-            <h4>Create User</h4>
+    .btn-back {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 7px;
+        padding: 6px 12px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #64748b;
+        cursor: pointer;
+        font-family: 'DM Sans', sans-serif;
+        text-decoration: none;
+        transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+
+        .btn-back:hover {
+            border-color: #93c5fd;
+            color: #1a56db;
+            background: #eff6ff;
+            text-decoration: none;
+        }
+
+    .form-page-title {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .form-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    }
+
+    .form-card-head {
+        padding: 22px 28px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .form-card-eyebrow {
+        font-size: 11px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: #1a56db;
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+
+    .form-card-title {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .form-card-body {
+        padding: 28px;
+    }
+
+    .form-field {
+        margin-bottom: 22px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 12px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: #64748b;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .form-input, .form-select {
+        width: 100%;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 11px 14px;
+        font-size: 14px;
+        color: #1e293b;
+        font-family: 'DM Sans', sans-serif;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+        .form-input:focus, .form-select:focus {
+            border-color: #1a56db;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+        }
+
+        .form-input:disabled {
+            background: #f1f5f9;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .form-input::placeholder {
+            color: #cbd5e1;
+        }
+
+    .check-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 14px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+    }
+
+    .check-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        color: #334155;
+        cursor: pointer;
+    }
+
+        .check-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #1a56db;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .check-item.all-companies {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+    .form-card-foot {
+        padding: 18px 28px;
+        border-top: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .btn-submit {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: #1a56db;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #fff;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+        box-shadow: 0 2px 8px rgba(26,86,219,0.2);
+    }
+
+        .btn-submit:hover {
+            background: #1646b8;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+    .alert-error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 13px;
+        color: #b91c1c;
+        margin-bottom: 22px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+</style>
+
+<div class="form-wrapper">
+    <div class="form-page-header">
+        <a href="@Url.Action("Index", "UserManagement")" class="btn-back">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6" /></svg>
+            Back
+        </a>
+        <div class="form-page-title">Create User</div>
+    </div>
+
+    <div class="form-card">
+        <div class="form-card-head">
+            <div class="form-card-eyebrow">User Management</div>
+            <div class="form-card-title">New User</div>
         </div>
-
-        <div class="card-body">
+        <div class="form-card-body">
 
             @if (ViewBag.ErrorMessage != null)
             {
-                <div class="alert alert-danger">
+                <div class="alert-error">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
                     @ViewBag.ErrorMessage
                 </div>
             }
 
-            <form method="post">
-
-                <div class="mb-3">
-
-                    <label>User ID</label>
-
-                    <input type="text"
-                           name="UserId"
-                           class="form-control"
-                           required />
-
+            <form method="post" id="createForm">
+                <div class="form-field">
+                    <label class="form-label">User ID</label>
+                    <input type="text" name="UserId" class="form-input" placeholder="กรอก User ID" required />
                 </div>
-
-                <div class="mb-3">
-
-                    <label>User Name</label>
-
-                    <input type="text"
-                           name="UserName"
-                           class="form-control"
-                           required />
-
+                <div class="form-field">
+                    <label class="form-label">User Name</label>
+                    <input type="text" name="UserName" class="form-input" placeholder="กรอก User Name" required />
                 </div>
-
-                <div class="mb-3">
-
-                    <label>Password</label>
-
-                    <input type="password"
-                           name="password"
-                           class="form-control"
-                           required />
-
+                <div class="form-field">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-input" placeholder="••••••••" required />
                 </div>
-
-                <div class="mb-3">
-
-                    <label>Confirm Password</label>
-
-                    <input type="password"
-                           name="confirmPassword"
-                           class="form-control"
-                           required />
-
+                <div class="form-field">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" name="confirmPassword" class="form-input" placeholder="••••••••" required />
                 </div>
-
-                <div class="mb-3">
-
-                    <label>Application Access</label>
-
-                    @foreach (var app in (IEnumerable<SelectListItem>)ViewBag.Applications)
-                    {
-                        <div class="form-check">
-                            <input type="checkbox"
-                                   name="SelectedAppIds"
-                                   value="@app.Value"
-                                   class="form-check-input"
-                                   id="app_@app.Value"
-                                   @(app.Selected ? "checked" : string.Empty) />
-
-                            <label class="form-check-label"
-                                   for="app_@app.Value">
+                <div class="form-field">
+                    <label class="form-label">Application Access</label>
+                    <div class="check-group">
+                        @foreach (var app in (IEnumerable<SelectListItem>)ViewBag.Applications)
+                        {
+                            <label class="check-item">
+                                <input type="checkbox" name="SelectedAppIds" value="@app.Value" id="app_@app.Value" @(app.Selected ? "checked" : string.Empty) />
                                 @app.Text
                             </label>
-                        </div>
-                    }
-
+                        }
+                    </div>
                 </div>
-
-                <div class="mb-3">
-
-                    <label>Company Access</label>
-
-                    <input type="hidden"
-                           name="IsAllCompanies"
-                           value="false" />
-
-                    <div class="form-check mb-2">
-                        <input type="checkbox"
-                               name="IsAllCompanies"
-                               value="true"
-                               class="form-check-input"
-                               id="IsAllCompanies"
-                               @(ViewBag.IsAllCompanies == true ? "checked" : string.Empty) />
-
-                        <label class="form-check-label"
-                               for="IsAllCompanies">
+                <div class="form-field">
+                    <label class="form-label">Company Access</label>
+                    <div class="check-group">
+                        <input type="hidden" name="IsAllCompanies" value="false" />
+                        <label class="check-item all-companies">
+                            <input type="checkbox" name="IsAllCompanies" value="true" id="IsAllCompanies" @(ViewBag.IsAllCompanies == true ? "checked" : string.Empty) />
                             All Companies
                         </label>
-                    </div>
-
-                    @foreach (var company in (IEnumerable<SelectListItem>)ViewBag.Companies)
-                    {
-                        <div class="form-check">
-                            <input type="checkbox"
-                                   name="SelectedCompanyCodes"
-                                   value="@company.Value"
-                                   class="form-check-input company-option"
-                                   id="company_@company.Value"
-                                   @(company.Selected ? "checked" : string.Empty) />
-
-                            <label class="form-check-label"
-                                   for="company_@company.Value">
+                        @foreach (var company in (IEnumerable<SelectListItem>)ViewBag.Companies)
+                        {
+                            <label class="check-item">
+                                <input type="checkbox" name="SelectedCompanyCodes" value="@company.Value" class="company-option" id="company_@company.Value" @(company.Selected ? "checked" : string.Empty) />
                                 @company.Text
                             </label>
-                        </div>
-                    }
-
+                        }
+                    </div>
                 </div>
-
-                <div class="mb-3">
-
-                    <label>Role</label>
-
-                    @Html.DropDownList(
-                        "RoleId",
-                        (IEnumerable<SelectListItem>)ViewBag.Roles,
-                        "Select Role",
-                        new { @class = "form-select", required = "required" })
-
+                <div class="form-field">
+                    <label class="form-label">Role</label>
+                    @Html.DropDownList("RoleId", (IEnumerable<SelectListItem>)ViewBag.Roles, "Select Role", new { @class = "form-select", required = "required" })
                 </div>
-
-                <button type="submit"
-                        class="btn btn-primary">
-
-                    Create User
-
-                </button>
-
             </form>
 
         </div>
-
+        <div class="form-card-foot">
+            <button type="submit" form="createForm" class="btn-submit">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>
+                Create User
+            </button>
+        </div>
     </div>
-
 </div>
 
 <script>
     (function () {
-        var allCompanies =
-            document.getElementById("IsAllCompanies");
-
-        var companyOptions =
-            document.querySelectorAll(".company-option");
-
+        var allCompanies = document.getElementById("IsAllCompanies");
+        var companyOptions = document.querySelectorAll(".company-option");
         function syncCompanyOptions() {
             for (var i = 0; i < companyOptions.length; i++) {
                 companyOptions[i].disabled = allCompanies.checked;
             }
         }
-
         if (allCompanies) {
             allCompanies.addEventListener("change", syncCompanyOptions);
             syncCompanyOptions();

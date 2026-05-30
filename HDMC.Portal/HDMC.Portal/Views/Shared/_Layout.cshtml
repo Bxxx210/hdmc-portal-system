@@ -166,6 +166,10 @@
             </a>
             @if (Session["RoleId"] != null && Session["RoleId"].ToString() == "1")
             {
+                <a href="@Url.Action("Index", "UserManagement")"
+                   class="nav-link @(ViewBag.Title == "User Management" ? "active" : "")">
+                    User Management
+                </a>
                 <a href="@Url.Action("Index", "SystemSettings")"
                    class="nav-link @(ViewBag.Title == "System Settings" ? "active" : "")">
                     System Settings
