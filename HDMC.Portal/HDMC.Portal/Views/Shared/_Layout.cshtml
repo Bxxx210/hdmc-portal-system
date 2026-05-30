@@ -3,37 +3,202 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - HDMC Portal</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <style>
+        @@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: #f0f2f5;
+            font-family: 'DM Sans', sans-serif;
+            color: #1e293b;
+        }
+
+        .portal-nav {
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            padding: 0 28px;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            margin-right: 8px;
+        }
+
+        .nav-brand-mark {
+            width: 32px;
+            height: 32px;
+            background: #1a56db;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .nav-brand-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #1e293b;
+        }
+
+        .nav-divider {
+            width: 1px;
+            height: 20px;
+            background: #e2e8f0;
+            margin: 0 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .nav-link {
+            padding: 6px 12px;
+            font-size: 14px;
+            font-weight: 400;
+            color: #64748b;
+            text-decoration: none;
+            border-radius: 7px;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .nav-link:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+            text-decoration: none;
+        }
+
+        .nav-link.active {
+            background: #eff6ff;
+            color: #1a56db;
+            font-weight: 500;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-left: auto;
+        }
+
+        .nav-username {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 7px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #64748b;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-logout:hover {
+            border-color: #fca5a5;
+            color: #b91c1c;
+            background: #fef2f2;
+        }
+
+        .portal-body {
+            min-height: calc(100vh - 56px);
+        }
+
+        .portal-footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #cbd5e1;
+            border-top: 1px solid #e2e8f0;
+            background: #fff;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    @if (Session["RoleId"] != null &&
-                         Session["RoleId"].ToString() == "1")
-                    {
-                        <li>@Html.ActionLink("System Settings", "Index", "SystemSettings", new { area = "" }, new { @class = "nav-link" })</li>
-                    }
-                </ul>
-            </div>
+
+    <nav class="portal-nav">
+        <a href="@Url.Action("Index", "Home")" class="nav-brand">
+            <div class="nav-brand-mark">HD</div>
+            <div class="nav-brand-text">HDMC</div>
+        </a>
+
+        <div class="nav-divider"></div>
+
+        <div class="nav-links">
+            <a href="@Url.Action("Index", "Home")"
+               class="nav-link @(ViewBag.Title == "Home" ? "active" : "")">
+                Home
+            </a>
+            @if (Session["RoleId"] != null && Session["RoleId"].ToString() == "1")
+            {
+                <a href="@Url.Action("Index", "SystemSettings")"
+                   class="nav-link @(ViewBag.Title == "System Settings" ? "active" : "")">
+                    System Settings
+                </a>
+            }
+        </div>
+
+        <div class="nav-right">
+            @if (Session["UserName"] != null)
+            {
+                <span class="nav-username">@Session["UserName"]</span>
+            }
+            <form method="post" action="@Url.Action("Index", "Logout")" style="margin:0;">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn-logout">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    Logout
+                </button>
+            </form>
         </div>
     </nav>
-    <div class="container body-content">
+
+    <div class="portal-body">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
     </div>
+
+    <footer class="portal-footer">
+        © @DateTime.Now.Year HDMC — All rights reserved
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

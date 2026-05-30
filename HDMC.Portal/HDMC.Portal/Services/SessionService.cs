@@ -21,6 +21,10 @@ namespace HDMC.Portal.Services
             session[UserNameKey] = user.UserName;
             session[RoleIdKey] = user.RoleId;
         }
+        public void ClearSession(HttpSessionStateBase session)
+        {
+            session.Clear();
+        }
 
         public void SetCompany(HttpSessionStateBase session, string company)
         {

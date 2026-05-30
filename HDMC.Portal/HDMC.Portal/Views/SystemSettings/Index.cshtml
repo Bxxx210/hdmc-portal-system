@@ -1,64 +1,227 @@
 @model HDMC.Portal.Models.SystemSettingModel
-
 @{
     ViewBag.Title = "System Settings";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
+<style>
+    .settings-wrapper {
+        max-width: 640px;
+        margin: 40px auto;
+        padding: 0 24px;
+    }
 
-    <div class="card shadow">
+    .btn-back {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 7px;
+        padding: 6px 12px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #64748b;
+        cursor: pointer;
+        font-family: 'DM Sans', sans-serif;
+        text-decoration: none;
+        transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
 
-        <div class="card-header">
-            <h4>System Settings</h4>
+        .btn-back:hover {
+            border-color: #93c5fd;
+            color: #1a56db;
+            background: #eff6ff;
+            text-decoration: none;
+        }
+
+    .settings-title {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+        letter-spacing: 0.3px;
+    }
+
+    .settings-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    }
+
+    .settings-card-head {
+        padding: 22px 28px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .settings-card-eyebrow {
+        font-size: 11px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: #1a56db;
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+
+    .settings-card-title {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .settings-card-body {
+        padding: 28px;
+    }
+
+    .form-field {
+        margin-bottom: 22px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 12px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: #64748b;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .form-input {
+        width: 100%;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 11px 14px;
+        font-size: 14px;
+        color: #1e293b;
+        font-family: 'DM Sans', sans-serif;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+        .form-input:focus {
+            border-color: #1a56db;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+        }
+
+    .form-hint {
+        font-size: 12px;
+        color: #94a3b8;
+        margin-top: 5px;
+    }
+
+    .settings-card-foot {
+        padding: 18px 28px;
+        border-top: 1px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .btn-save {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: #1a56db;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #fff;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+        box-shadow: 0 2px 8px rgba(26,86,219,0.2);
+    }
+
+        .btn-save:hover {
+            background: #1646b8;
+        }
+
+        .btn-save:active {
+            transform: scale(0.98);
+        }
+
+    .alert-success {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 13px;
+        color: #15803d;
+        margin-bottom: 22px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+</style>
+
+<div class="settings-wrapper">
+    <div class="settings-card">
+        <div class="settings-card-head">
+            <div class="settings-card-eyebrow">Configuration</div>
+            <div class="settings-card-title">URL Settings</div>
         </div>
 
-        <div class="card-body">
+        <div class="settings-card-body">
 
             @if (TempData["SuccessMessage"] != null)
             {
-                <div class="alert alert-success">
+                <div class="alert-success">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
                     @TempData["SuccessMessage"]
                 </div>
             }
 
             <form method="post">
-
-                <div class="mb-3">
-
-                    <label>Hardware Entry URL</label>
-
+                <div class="form-field">
+                    <label class="form-label">Hardware Entry URL</label>
                     <input type="url"
                            name="HardwareEntryUrl"
                            value="@Model.HardwareEntryUrl"
-                           class="form-control"
+                           class="form-input"
+                           placeholder="https://..."
                            required />
-
+                    <div class="form-hint">URL สำหรับเข้าสู่ระบบ Hardware Min Alarm</div>
                 </div>
-
-                <div class="mb-3">
-
-                    <label>Portal Login URL</label>
-
+                <div class="form-field">
+                    <label class="form-label">Portal Login URL</label>
                     <input type="url"
                            name="PortalLoginUrl"
                            value="@Model.PortalLoginUrl"
-                           class="form-control"
+                           class="form-input"
+                           placeholder="https://..."
                            required />
-
+                    <div class="form-hint">URL สำหรับ redirect กลับมา Portal</div>
                 </div>
-
-                <button type="submit"
-                        class="btn btn-primary">
-
-                    Save Settings
-
-                </button>
-
             </form>
 
         </div>
 
+        <div class="settings-card-foot">
+            <span style="font-size:12px; color:#94a3b8;">การเปลี่ยนแปลงจะมีผลทันที</span>
+            <button type="submit" form="settingsForm" class="btn-save"
+                    onclick="this.closest('.settings-card').querySelector('form').submit()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                    <polyline points="17 21 17 13 7 13 7 21" />
+                    <polyline points="7 3 7 8 15 8" />
+                </svg>
+                Save Settings
+            </button>
+        </div>
     </div>
 
 </div>

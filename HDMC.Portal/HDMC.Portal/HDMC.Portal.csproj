@@ -152,6 +152,7 @@
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\LogoutController.cs" />
     <Compile Include="Controllers\SystemSettingsController.cs" />
     <Compile Include="Controllers\UserManagementController.cs" />
     <Compile Include="Global.asax.cs">
@@ -236,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Logout\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
