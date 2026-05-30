@@ -1,61 +1,244 @@
 ﻿@{
     ViewBag.Title = "Login";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
 
-<div class="container mt-5">
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap');
 
-    <div class="row justify-content-center">
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        <div class="col-md-4">
+    html, body {
+        height: 100%;
+        background: #f0f2f5;
+        font-family: 'DM Sans', sans-serif;
+    }
 
-            <div class="card shadow">
+    .login-wrapper {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+    }
 
-                <div class="card-header">
-                    <h4>HDMC Portal Login</h4>
-                </div>
+    .login-card-body {
+        padding: 28px 32px 32px;
+    }
+    
+    .form-input,
+    .btn-login {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
-                <div class="card-body">
+    .login-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 32px;
+    }
 
-                    @if (ViewBag.ErrorMessage != null)
-                    {
-                        <div class="alert alert-danger">
-                            @ViewBag.ErrorMessage
-                        </div>
-                    }
+    .login-brand-mark {
+        width: 40px;
+        height: 40px;
+        background: #1a56db;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        color: #fff;
+    }
 
-                    <form method="post">
+    .login-brand-text {
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        font-size: 22px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #1e293b;
+        line-height: 1;
+    }
 
-                        <div class="mb-3">
-                            <label>User ID</label>
+    .login-brand-sub {
+        font-size: 11px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #94a3b8;
+        margin-top: 2px;
+    }
 
-                            <input type="text"
-                                   name="userId"
-                                   class="form-control"
-                                   autofocus />
-                        </div>
+    .login-card {
+        width: 100%;
+        max-width: 400px;
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+        overflow: hidden;
+    }
 
-                        <div class="mb-3">
-                            <label>Password</label>
+    .login-card-head {
+        padding: 28px 32px 24px;
+        border-bottom: 1px solid #f1f5f9;
+    }
 
-                            <input type="password"
-                                   name="password"
-                                   class="form-control" />
-                        </div>
+    .login-card-eyebrow {
+        font-size: 11px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: #1a56db;
+        font-weight: 500;
+        margin-bottom: 6px;
+    }
 
-                        <button type="submit"
-                                class="btn btn-primary w-100">
-                            Login
-                        </button>
+    .login-card-title {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 26px;
+        font-weight: 700;
+        color: #1e293b;
+    }
 
-                    </form>
+    .login-card-body {
+        padding: 28px 32px 32px;
+    }
 
-                </div>
+    .form-field { margin-bottom: 20px; }
 
-            </div>
+    .form-label {
+        display: block;
+        font-size: 12px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: #64748b;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
 
+    .form-input {
+        width: 100%;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 11px 14px;
+        font-size: 15px;
+        color: #1e293b;
+        font-family: 'DM Sans', sans-serif;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        outline: none;
+    }
+
+    .form-input:focus {
+        border-color: #1a56db;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+    }
+
+    .form-input::placeholder { color: #cbd5e1; }
+
+    .btn-login {
+        width: 100%;
+        background: #1a56db;
+        border: none;
+        border-radius: 8px;
+        padding: 13px;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #fff;
+        cursor: pointer;
+        margin-top: 6px;
+        transition: background 0.2s, transform 0.1s;
+        box-shadow: 0 2px 8px rgba(26,86,219,0.25);
+    }
+
+    .btn-login:hover { background: #1646b8; }
+    .btn-login:active { transform: scale(0.98); }
+
+    .alert-error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 13px;
+        color: #b91c1c;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .login-footer {
+        margin-top: 28px;
+        font-size: 12px;
+        color: #94a3b8;
+    }
+    .form-input {
+        max-width: 100% !important;
+    }
+</style>
+
+<div class="login-wrapper">
+    <div class="login-brand">
+        <div class="login-brand-mark">HD</div>
+        <div>
+            <div class="login-brand-text">HDMC</div>
+            <div class="login-brand-sub">Industrial Portal</div>
         </div>
-
     </div>
 
+    <div class="login-card">
+        <div class="login-card-head">
+            <div class="login-card-eyebrow">Secure Access</div>
+            <div class="login-card-title">Portal Login</div>
+        </div>
+        <div class="login-card-body">
+
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert-error">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+
+            <form method="post" id="loginForm">
+                <div class="form-field">
+                    <label class="form-label">User ID</label>
+                    <input type="text"
+                           name="userId"
+                           id="txtUserId"
+                           class="form-input"
+                           placeholder="กรอก User ID"
+                           value="@(ViewBag.UserId ?? "")"
+                           autofocus
+                           autocomplete="username" />
+                </div>
+                <div class="form-field">
+                    <label class="form-label">Password</label>
+                    <input type="password"
+                           name="password"
+                           id="txtPassword"
+                           class="form-input"
+                           placeholder="••••••••"
+                           autocomplete="current-password" />
+                </div>
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="login-footer">© @DateTime.Now.Year HDMC — All rights reserved</div>
 </div>

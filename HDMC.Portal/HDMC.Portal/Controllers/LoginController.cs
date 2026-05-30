@@ -35,7 +35,7 @@ namespace HDMC.Portal.Controllers
             if (user == null)
             {
                 ViewBag.ErrorMessage = "Invalid User ID or Password";
-
+                ViewBag.UserId = userId;
                 return View();
             }
 
