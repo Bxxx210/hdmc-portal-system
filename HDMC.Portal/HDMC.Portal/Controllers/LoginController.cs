@@ -41,7 +41,7 @@ namespace HDMC.Portal.Controllers
 
             _sessionService.SetUser(Session, user);
 
-            return RedirectToAction("Index", "Company");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

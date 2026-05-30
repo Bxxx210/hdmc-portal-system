@@ -1,60 +1,192 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-5">
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+    .home-wrapper {
+        padding: 40px 24px;
+        max-width: 860px;
+        margin: 0 auto;
+    }
+
+    .home-header {
+        margin-bottom: 32px;
+    }
+
+    .home-greeting {
+        font-size: 13px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #94a3b8;
+        font-weight: 500;
+        margin-bottom: 6px;
+    }
+
+    .home-username {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: #1e293b;
+        letter-spacing: 0.5px;
+    }
+
+    .home-divider {
+        height: 1px;
+        background: #e2e8f0;
+        margin-bottom: 32px;
+    }
+
+    .home-section-label {
+        font-size: 11px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: #94a3b8;
+        font-weight: 500;
+        margin-bottom: 16px;
+    }
+
+    .module-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 14px;
+    }
+
+    .module-card {
+        display: block;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 22px 20px;
+        text-decoration: none;
+        transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+        cursor: pointer;
+    }
+
+    .module-card:hover {
+        border-color: #1a56db;
+        box-shadow: 0 4px 16px rgba(26,86,219,0.1);
+        transform: translateY(-2px);
+        text-decoration: none;
+    }
+
+    .module-card:active {
+        transform: translateY(0);
+    }
+
+    .module-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+
+    .module-icon.blue  { background: #dbeafe; }
+    .module-icon.green { background: #dcfce7; }
+    .module-icon.amber { background: #fef3c7; }
+
+    .module-name {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 17px;
+        font-weight: 700;
+        color: #1e293b;
+        letter-spacing: 0.3px;
+        margin-bottom: 4px;
+    }
+
+    .module-desc {
+        font-size: 12px;
+        color: #94a3b8;
+        line-height: 1.5;
+    }
+
+    .alert-error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 13px;
+        color: #b91c1c;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+</style>
+
+<div class="home-wrapper">
 
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger">
+        <div class="alert-error">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
             @TempData["ErrorMessage"]
         </div>
     }
 
-    <h2>
-        Welcome @Session["UserName"]
-    </h2>
+    <div class="home-header">
+        <div class="home-greeting">Welcome back</div>
+        <div class="home-username">@Session["UserName"]</div>
+    </div>
 
-    <hr />
+    <div class="home-divider"></div>
 
-    <div class="list-group">
+    <div class="home-section-label">Select Module</div>
+
+    <div class="module-grid">
 
         @if (ViewBag.CanAccessHardware == true)
         {
-            <a href="@Url.Action(
-                 "Index",
-                 "Company")"
-               class="list-group-item list-group-item-action">
-                Hardware Min Alarm
+            <a href="@Url.Action("Index", "Company")" class="module-card">
+                <div class="module-icon blue">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a56db" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" />
+                        <path d="M8 21h8M12 17v4" />
+                    </svg>
+                </div>
+                <div class="module-name">Hardware Min Alarm</div>
+                <div class="module-desc">จัดการและติดตาม Hardware Alarm</div>
             </a>
         }
 
         @if (ViewBag.CanAccessCountLocation == true)
         {
-            <a href="@Url.Action(
-                 "Index",
-                 "CountLocation")"
-               class="list-group-item list-group-item-action">
-
-                Count Location Pick Face
-
+            <a href="@Url.Action("Index", "CountLocation")" class="module-card">
+                <div class="module-icon green">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                    </svg>
+                </div>
+                <div class="module-name">Count Location</div>
+                <div class="module-desc">Pick Face Count Location</div>
             </a>
         }
 
         @if (ViewBag.IsAdmin == true)
         {
-            <a href="@Url.Action(
-                 "Index",
-                 "UserManagement")"
-               class="list-group-item list-group-item-action">
-
-                User Management
-
-
+            <a href="@Url.Action("Index", "UserManagement")" class="module-card">
+                <div class="module-icon amber">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                </div>
+                <div class="module-name">User Management</div>
+                <div class="module-desc">จัดการ User และสิทธิ์การเข้าถึง</div>
             </a>
         }
 
     </div>
-
 </div>
